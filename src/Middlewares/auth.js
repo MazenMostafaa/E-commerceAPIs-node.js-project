@@ -9,7 +9,7 @@ export const isAuth = async (req, res, next) => {
             return res.status(400).json({ message: 'Please login first' })
         }
 
-        if (!authorization.startsWith('Bearer')) {
+        if (!authorization.startsWith('ecommerce__')) {
             return res.status(400).json({ message: 'invalid token prefix' })
         }
 

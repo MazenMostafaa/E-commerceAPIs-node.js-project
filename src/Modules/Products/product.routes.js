@@ -6,6 +6,7 @@ import { multerCloudFunction } from '../../Services/multerCloud.js'
 import { allowedExtensions } from '../../Utils/allowedExtensions.js'
 import { validationCoreFunction } from '../../Middlewares/validation.js'
 import * as validators from './product.validationSchemas.js'
+import { isAuth } from '../../Middlewares/auth.js'
 
 
 router.get('/', validationCoreFunction(validators.GetAllProductSchema), asyncHandler(pc.getAllProd))
@@ -16,6 +17,7 @@ router.get('/listProducts', asyncHandler(pc.listProducts))
 
 router.post(
     '/add',
+    isAuth,
     multerCloudFunction(allowedExtensions.Image).array('productImage', 3),
     validationCoreFunction(validators.AddProductSchema),
     asyncHandler(pc.addProduct),
@@ -23,10 +25,11 @@ router.post(
 
 router.put(
     '/update',
+    isAuth,
     multerCloudFunction(allowedExtensions.Image).array('productImage', 3),
     validationCoreFunction(validators.updateProductSchema),
     asyncHandler(pc.updateProduct),
 )
 
-router.delete('/delete', validationCoreFunction(validators.DeleteProductSchema), asyncHandler(pc.deleteProduct))
+router.delete('/delete', isAuth, validationCoreFunction(validators.DeleteProductSchema), asyncHandler(pc.deleteProduct))
 export default router

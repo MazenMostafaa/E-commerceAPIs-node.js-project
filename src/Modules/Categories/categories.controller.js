@@ -11,6 +11,7 @@ const nanoid = customAlphabet('123456_=!ascbhdtel', 5)
 
 // ========================================== create Category ==========================================
 export const createCategory = async (req, res, next) => {
+    const { _id } = req.authUser
     const { name } = req.body
     const slug = slugify(name, '_')
 
@@ -43,6 +44,7 @@ export const createCategory = async (req, res, next) => {
             public_id,
         },
         customId,
+        createdBy: _id
     }
 
     req.failedDocument = {
@@ -62,13 +64,17 @@ export const createCategory = async (req, res, next) => {
 
 // ========================================== upadte Category ==========================================
 export const updateCategory = async (req, res, next) => {
+    const { _id } = req.authUser
     const { categoryId } = req.query
     const { name } = req.body
 
     // get category by id
-    const category = await categoryModel.findById(categoryId)
+    const category = await categoryModel.findOne({
+        _id: categoryId,
+        createdBy: _id,
+    })
     if (!category) {
-        return next(new Error('invalud category Id', { cause: 400 }))
+        return next(new Error('invalud category Id Or user Id', { cause: 400 }))
     }
 
     if (name) {
@@ -111,6 +117,7 @@ export const updateCategory = async (req, res, next) => {
     if (!name && !req.file) {
         return next(new Error('Empty Inputs Please enter requirment of API', { cause: 400, }))
     }
+    category.updatedBy = _id
     await category.save()
     res.status(200).json({ message: 'Updated Done', category })
 }
@@ -133,12 +140,16 @@ export const getAllCategories = async (req, res, next) => {
 
 // ========================================= delete category =========================
 export const deleteCategory = async (req, res, next) => {
+    const { _id } = req.authUser
     const { categoryId } = req.query
 
     // check category id
-    const categoryExists = await categoryModel.findByIdAndDelete(categoryId)
+    const categoryExists = await categoryModel.findOneAndDelete({
+        _id: categoryId,
+        createdBy: _id,
+    })
     if (!categoryExists) {
-        return next(new Error('invalid categoryId', { cause: 400 }))
+        return next(new Error('invalid categoryId Or user Id', { cause: 400 }))
     }
 
     //=========== Delete from cloudinary ==============
@@ -156,13 +167,13 @@ export const deleteCategory = async (req, res, next) => {
     })
 
     if (!deleteRelatedSubCategories.deletedCount) {
-        return next(new Error('delete Category has been Done and there is not subCategory an other leaves', { cause: 400 }))
+        return next(new Error('delete Category has been Done and there is not subCategory and other leaves', { cause: 400 }))
     }
     const deleteRelatedBrands = await brandModel.deleteMany({
         categoryId,
     })
     if (!deleteRelatedBrands.deletedCount) {
-        return next(new Error('delete Category has been Done and there is not brand an other leaves', { cause: 400 }))
+        return next(new Error('delete Category has been Done and there is not brand and other leaves', { cause: 400 }))
     }
 
     const deleteRelatedProducts = await productModel.deleteMany({

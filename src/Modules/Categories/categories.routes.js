@@ -6,6 +6,7 @@ import * as cc from './categories.controller.js'
 import { validationCoreFunction } from '../../Middlewares/validation.js'
 import * as validators from './category.validationSchemas.js'
 import subCategoryRouter from '../subCategories/subCategories.routes.js'
+import { isAuth } from '../../Middlewares/auth.js'
 
 const router = Router()
 
@@ -16,6 +17,7 @@ router.get('/', asyncHandler(cc.getAllCategories))
 
 router.post(
     '/create',
+    isAuth,
     multerCloudFunction(allowedExtensions.Image).single('categoryImage'),
     validationCoreFunction(validators.createCategorySchema),
     asyncHandler(cc.createCategory),
@@ -23,12 +25,14 @@ router.post(
 
 router.put(
     '/update',
+    isAuth,
     multerCloudFunction(allowedExtensions.Image).single('categoryImage'),
     validationCoreFunction(validators.updateCategorySchema),
     asyncHandler(cc.updateCategory),
 )
 
 router.delete('/delete',
+    isAuth,
     validationCoreFunction(validators.deleteCategorySchema)
     , asyncHandler(cc.deleteCategory))
 

@@ -9,6 +9,7 @@ const nanoid = customAlphabet('123456_=!ascbhdtel', 5)
 
 //======================================= create subCategory ==============================
 export const createSubCategory = async (req, res, next) => {
+    const { _id } = req.authUser
     const { categoryId } = req.query
     const { name } = req.body
 
@@ -50,6 +51,7 @@ export const createSubCategory = async (req, res, next) => {
             public_id,
         },
         categoryId,
+        createdBy: _id
     }
     req.failedDocument = {
         model: 'subCategoryModel',
@@ -81,13 +83,17 @@ export const getAllSubCategories = async (req, res, next) => {
 
 // ========================================== upadte subCategory ==========================================
 export const updateSubCategory = async (req, res, next) => {
+    const { _id } = req.authUser
     const { subCategoryId } = req.query
     const { name } = req.body
 
     // get subcategory by id
-    const subCategory = await subCategoryModel.findById(subCategoryId)
+    const subCategory = await subCategoryModel.findOne({
+        _id: subCategoryId,
+        createdBy: _id
+    })
     if (!subCategory) {
-        return next(new Error('invalid subCategory Id', { cause: 400 }))
+        return next(new Error('invalid subCategory Id Or User Id', { cause: 400 }))
     }
 
     // get category by id
@@ -135,16 +141,21 @@ export const updateSubCategory = async (req, res, next) => {
     if (!name && !req.file) {
         return next(new Error('Empty Inputs Please enter requirment of API', { cause: 400, }))
     }
+    subCategory.updatedBy = _id
     await subCategory.save()
     res.status(200).json({ message: 'Updated Done', subCategory })
 }
 
 // ========================================= delete subCategory =========================
 export const deleteSubCategory = async (req, res, next) => {
+    const { _id } = req.authUser
     const { subCategoryId } = req.query
 
     // check SubCategory id
-    const subCategoryExists = await subCategoryModel.findByIdAndDelete(subCategoryId)
+    const subCategoryExists = await subCategoryModel.findOneAndDelete({
+        _id: subCategoryId,
+        createdBy: _id
+    })
     if (!subCategoryExists) {
         return next(new Error('invalid subCategory Id', { cause: 400 }))
     }
@@ -169,7 +180,7 @@ export const deleteSubCategory = async (req, res, next) => {
         subCategoryId,
     })
     if (!deleteRelatedBrands.deletedCount) {
-        return next(new Error('delete SubCategory has been Done and there is not brand an other leaves', { cause: 400 }))
+        return next(new Error('delete SubCategory has been Done and there is not brand and other leaves', { cause: 400 }))
     }
 
     const deleteRelatedProducts = await productModel.deleteMany({

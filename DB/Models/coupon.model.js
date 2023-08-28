@@ -27,7 +27,7 @@ const couponSchema = new Schema(
         createdBy: {
             type: Schema.Types.ObjectId,
             ref: 'User',
-            required: false, // TODO: convert into true after creating usermodel
+            required: true,
         },
         updatedBy: {
             type: Schema.Types.ObjectId,
@@ -43,6 +43,7 @@ const couponSchema = new Schema(
                 userId: {
                     type: Schema.Types.ObjectId,
                     ref: 'User',
+                    required: true
                 },
                 maxUsage: {
                     type: Number,
@@ -51,7 +52,12 @@ const couponSchema = new Schema(
                 },
             },
         ],
-
+        couponAssginedToProduct: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Product',
+            },
+        ],
         fromDate: {
             type: String,
             required: true,
@@ -62,7 +68,6 @@ const couponSchema = new Schema(
         },
         couponStatus: {
             type: String,
-            required: true,
             enum: ['Expired', 'Valid'],
             default: 'Valid',
         },

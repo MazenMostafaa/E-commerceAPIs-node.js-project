@@ -1,4 +1,5 @@
 import joi from 'joi'
+import { generalFields } from '../../Middlewares/validation.js'
 
 export const addCouponSchema = {
     body: joi.object({
@@ -11,5 +12,6 @@ export const addCouponSchema = {
         toDate: joi.date().greater(joi.ref('fromDate')).required(),
         isPercentage: joi.boolean().optional(),
         isFixedAmount: joi.boolean().optional(),
+        couponAssginedToUsers: joi.array().items().min(1).unique().required()
     }).required()
 }

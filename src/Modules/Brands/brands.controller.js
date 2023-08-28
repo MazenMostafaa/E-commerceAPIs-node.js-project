@@ -9,14 +9,20 @@ const nanoid = customAlphabet('123456_=!ascbhdtel', 5)
 
 //=================================== Add Brand ========================
 export const addBrand = async (req, res, next) => {
+    const { _id } = req.authUser
     const { name } = req.body
     const { subCategoryId, categoryId } = req.query
     // check categories
+
     const subCategoryExists = await subCategoryModel.findById(subCategoryId)
+    if (!subCategoryExists) {
+        return next(new Error('invalid subCategories', { cause: 400 }))
+    }
+
     const categoryExists = await categoryModel.findById(categoryId)
 
-    if (!subCategoryExists || !categoryExists) {
-        return next(new Error('invalid categories or subCategory', { cause: 400 }))
+    if (!categoryExists) {
+        return next(new Error('invalid categories', { cause: 400 }))
     }
     if (categoryExists._id.toString() !== subCategoryExists.categoryId.toString()) {
         return next(new Error('category and subCategory are not compatible', { cause: 400 }))
@@ -47,6 +53,7 @@ export const addBrand = async (req, res, next) => {
         categoryId,
         subCategoryId,
         customId,
+        createdBy: _id
     }
 
     req.failedDocument = {
@@ -65,11 +72,15 @@ export const addBrand = async (req, res, next) => {
 export const updateBrand = async (req, res, next) => {
     const { brandId } = req.query
     const { name } = req.body
+    const { _id } = req.authUser
 
     // get Brand by id 
-    const isBrandExist = await brandModel.findById(brandId)
+    const isBrandExist = await brandModel.findOne({
+        _id: brandId,
+        createdBy: _id
+    })
     if (!isBrandExist) {
-        return next(new Error('invalid brand Id', { cause: 400 }))
+        return next(new Error('invalid brand Id Or User Id', { cause: 400 }))
     }
     // get subcategory by id from Brand model
     const subCategory = await subCategoryModel.findById(isBrandExist.subCategoryId)
@@ -122,6 +133,8 @@ export const updateBrand = async (req, res, next) => {
     if (!name && !req.file) {
         return next(new Error('Empty Inputs Please enter requirment of API', { cause: 400, }))
     }
+
+    isBrandExist.updatedBy = _id
     await isBrandExist.save()
     res.status(200).json({ message: 'Updated Done', isBrandExist })
 }
@@ -129,9 +142,13 @@ export const updateBrand = async (req, res, next) => {
 // ========================================= delete Brand =========================
 export const deleteBrand = async (req, res, next) => {
     const { brandId } = req.query
+    const { _id } = req.authUser
 
     // get Brand by id 
-    const isBrandExsit = await brandModel.findByIdAndDelete(brandId)
+    const isBrandExsit = await brandModel.findOneAndDelete({
+        _id: brandId,
+        createdBy: _id
+    })
     if (!isBrandExsit) {
         return next(new Error('invalid brand Id', { cause: 400 }))
     }

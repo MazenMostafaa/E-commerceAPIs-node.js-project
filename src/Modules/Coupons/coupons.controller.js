@@ -1,6 +1,8 @@
 import { couponModel } from '../../../DB/Models/coupon.model.js'
+import { userModel } from '../../../DB/Models/user.model.js'
 
 export const addCoupon = async (req, res, next) => {
+    const { _id } = req.authUser
     const {
         couponCode,
         couponAmount,
@@ -8,6 +10,7 @@ export const addCoupon = async (req, res, next) => {
         toDate,
         isPercentage,
         isFixedAmount,
+        couponAssginedToUsers
     } = req.body
 
     // check coupon code if it's duplicate
@@ -25,6 +28,27 @@ export const addCoupon = async (req, res, next) => {
         )
     }
 
+    // const products = await productModel
+    //   .find({ price: { $gte: 40000 } })
+    //   .select('_id')
+    // const couponAssginedToProduct = products
+
+    //======================== assgin to users ==================
+    let usersIds = []
+    for (const user of couponAssginedToUsers) {
+        usersIds.push(user.userId)
+    }
+
+    const usersCheck = await userModel.find({
+        _id: {
+            $in: usersIds,
+        },
+    })
+
+    if (usersIds.length !== usersCheck.length) {
+        return next(new Error('invalid userIds', { cause: 400 }))
+    }
+
     const couponObject = {
         couponCode,
         couponAmount,
@@ -32,6 +56,9 @@ export const addCoupon = async (req, res, next) => {
         toDate,
         isPercentage,
         isFixedAmount,
+        couponAssginedToUsers,
+        // couponAssginedToProduct,
+        createdBy: _id,
     }
     req.failedDocument = {
         model: 'couponModel',
