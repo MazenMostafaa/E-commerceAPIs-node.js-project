@@ -87,8 +87,7 @@ export const addProduct = async (req, res, next) => {
         id: `${customId}`
     }
     const product = await productModel.create(productObject)
-    // productObject = 5
-    // TODO: delete the uploaded pirctures if the function fail in catch scope
+
     if (!product) {
         await cloudinary.api.delete_resources(publicIds)
         return next(new Error('trye again later', { cause: 400 }))
@@ -114,91 +113,52 @@ export const updateProduct = async (req, res, next) => {
     }
 
     // ====================================Check Category Id=============================================
-    let CategOldCustomID
-    let categoryExists = await categoryModel.findById(categoryId)
+    let categoryExists
+    if (categoryId) {
 
-    if (categoryExists) {
+        categoryExists = await categoryModel.findById(categoryId)
+
         if (product.categoryId.toString() !== categoryExists._id.toString()) {
 
             return next(new Error('invalid Category id', { cause: 400 }))
         }
-        CategOldCustomID = categoryExists.customId
 
     }
     else {
         categoryExists = await categoryModel.findById(product.categoryId)
-        CategOldCustomID = categoryExists.customId
     }
 
+
     // ================================Check subCategory Id=================================================
-    let SubCategOldCustomID
-    let subCategoryExists = await subCategoryModel.findById(subCategoryId)
+
+    let subCategoryExists
 
     if (subCategoryExists) {
+
+        subCategoryExists = await subCategoryModel.findById(subCategoryId)
+
         if (product.subCategoryId.toString() !== subCategoryExists._id.toString()) {
             return next(new Error('invalid subCategory id', { cause: 400 }))
         }
-        // if (subCategoryExists.categoryId.toString() !== categoryId ?.toString()) {
-
-        //     return next(new Error('invalid Category id Related to this subCategory', { cause: 400 }))
-        // }
-        SubCategOldCustomID = subCategoryExists.customId
 
     }
     else {
         subCategoryExists = await subCategoryModel.findById(product.subCategoryId)
-        SubCategOldCustomID = subCategoryExists.customId
     }
 
     // ===================================Check Brand Id (OR) Change Path Of Brand==============================================
-    let flag = false
-    let BrandOldCustomID
 
-    let categIsValid
-    let subCategIsValid
-
-    let brandExists = await brandModel.findById(brandId)
+    let brandExists
     if (brandExists) {
 
+        brandExists = await brandModel.findById(brandId)
+
         if (product.brandId.toString() !== brandExists._id.toString()) {
-            //Already need to Change Path Of Brand 
 
-            // if (brandExists.categoryId.toString() !== categoryId || 1 .toString()) {
-            categIsValid = await categoryModel.findById(brandExists.categoryId)
-
-            if (!categIsValid) {
-                return next(new Error('invalid Category id Related to this Brand', { cause: 400 }))
-            }
-            // }
-
-
-            // if (brandExists.subCategoryId.toString() !== subCategoryId || 1 .toString()) {
-            subCategIsValid = await subCategoryModel.findById(brandExists.subCategoryId)
-
-            if (!subCategIsValid) {
-                return next(new Error('invalid SubCategory id', { cause: 400 }))
-            }
-            // }
-
-            // if (subCategIsValid.categoryId.toString() !== categIsValid._id.toString()) {
-            //     return next(new Error('There is something went wrong category does not compatible with subCategory', { cause: 400 }))
-            // }
-
-            product.categoryId = categIsValid._id
-            product.subCategoryId = subCategIsValid._id;
-
-            const OldBrand = await brandModel.findById(product.brandId)
-
-            BrandOldCustomID = OldBrand.customId
-            // product.customId
-            flag = true
+            return next(new Error('invalid Brand Id', { cause: 400 }))
         }
-        // product.brandId = brandId
-        // product.categoryId = brandExists.categoryId
-        // product.subCategoryId = brandExists.subCategoryId
     } else {
         brandExists = await brandModel.findById(product.brandId)
-        BrandOldCustomID = brandExists.customId
     }
 
     // ============In case getting Price and Discount amount==============
@@ -223,31 +183,7 @@ export const updateProduct = async (req, res, next) => {
         product.appliedDiscount = appliedDiscount
     }
 
-    // ===============Delete our old Path of Brand in cloudinary================
-    if (flag) {
 
-        await cloudinary.api.delete_resources_by_prefix(
-            `${process.env.PROJECT_FOLDER}/Categories/${categIsValid.customId}/subCategories/${SubCategOldCustomID}/Brands/${BrandOldCustomID}/Products/${product.customId}`)
-
-        await cloudinary.api.delete_folder(
-            `${process.env.PROJECT_FOLDER}/Categories/${CategOldCustomID}/subCategories/${SubCategOldCustomID}/Brands/${BrandOldCustomID}/Products/${product.customId}`)
-
-        // ===============Add new Images On cloud===================
-        if (!req.files.length) {
-            return next(new Error('please upload pictures', { cause: 400 }))
-        }
-        const Images = []
-        for (const file of req.files) {
-            const { secure_url, public_id } = await cloudinary.uploader.upload(
-                file.path,
-                {
-                    folder: `${process.env.PROJECT_FOLDER}/Categories/${categIsValid.customId}/subCategories/${subCategIsValid.customId}/Brands/${brandExists.customId}/Products/${product.customId}`,
-                },
-            )
-            Images.shift({ secure_url, public_id })
-        }
-
-    }
     // =================Handle Media of product in the DB and the cloudinary==========
     if (req.files.length) {
         let ImageArr = []

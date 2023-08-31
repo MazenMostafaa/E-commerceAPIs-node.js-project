@@ -5,6 +5,7 @@ import { sendEmailService } from '../../Services/sendEmailService.js'
 import { emailTemplate } from '../../Utils/emailTemplate.js'
 import { generateToken, verifyToken } from '../../Utils/tokenFunctions.js'
 import pkg from 'bcrypt'
+import { encryptionFun } from '../../Utils/encryptionFunction.js'
 
 //======================================== SignUp ===========================
 export const signUp = async (req, res, next) => {
@@ -51,6 +52,13 @@ export const signUp = async (req, res, next) => {
 
 
     // hash password => from hooks
+    // const encryptPhoneNumber = encryptionFun({ phoneNumber })
+
+    // console.log(encryptPhoneNumber);
+    // if (!encryptPhoneNumber) {
+    //     return next(new Error('fail to encode phone numbers', { cause: 400 }))
+    // }
+
     const user = new userModel({
         userName,
         email,
@@ -75,6 +83,7 @@ export const confirmEmail = async (req, res, next) => {
         token,
         signature: process.env.CONFIRMATION_EMAIL_TOKEN,
     })
+
     const user = await userModel.findOneAndUpdate(
         { email: decode?.email, isConfirmed: false },
         { isConfirmed: true },

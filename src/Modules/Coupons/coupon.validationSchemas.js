@@ -15,3 +15,8 @@ export const addCouponSchema = {
         couponAssginedToUsers: joi.array().items().min(1).unique().required()
     }).required()
 }
+
+
+export const deleteCouponSchem = {
+    query: joi.object({ couponId: generalFields.userid.required() }).required(),
+}

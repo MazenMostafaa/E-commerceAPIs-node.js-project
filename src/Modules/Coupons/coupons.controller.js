@@ -28,11 +28,6 @@ export const addCoupon = async (req, res, next) => {
         )
     }
 
-    // const products = await productModel
-    //   .find({ price: { $gte: 40000 } })
-    //   .select('_id')
-    // const couponAssginedToProduct = products
-
     //======================== assgin to users ==================
     let usersIds = []
     for (const user of couponAssginedToUsers) {
@@ -70,4 +65,20 @@ export const addCoupon = async (req, res, next) => {
         return next(new Error('fail to add coupon', { cause: 400 }))
     }
     res.status(201).json({ message: 'Done', couponDb })
+}
+
+
+// ================================== delete coupon ==========================
+export const deleteCoupon = async (req, res, next) => {
+    const { couponId } = req.query
+    const { _id } = req.authUser
+
+    const isCouponCodeDuplicated = await couponModel.findOneAndDelete({
+        _id: couponId,
+        createdBy: _id,
+    })
+    if (!isCouponCodeDuplicated) {
+        return next(new Error('invalid couponId', { cause: 400 }))
+    }
+    res.status(201).json({ message: 'Deleted done' })
 }

@@ -24,6 +24,8 @@ export const asyncHandler = (API) => {
                     if (model === 'couponModel') await allModels.couponModel.findOneAndDelete(id)
                     if (model === 'brandModel') await allModels.brandModel.findOneAndDelete(id)
                     if (model === 'userModel') await allModels.userModel.findOneAndDelete(id)
+                    if (model === 'cartModel') await allModels.cartModel.findOneAndDelete(id)
+                    // await allModels.model.findOneAndDelete(id)
                 }
                 res.status(500).json({ Message: "Falied" })
             })
@@ -32,6 +34,12 @@ export const asyncHandler = (API) => {
 
 export const globalResponse = (err, req, res, next) => {
     if (err) {
+        if (req.validationErrorArr) {
+            return res
+                .status(err['cause'] || 400)
+                .json({ message: req.validationErrorArr })
+        }
+
         return res.status(err['cause'] || 500).json({ message: err.message })
     }
 }
