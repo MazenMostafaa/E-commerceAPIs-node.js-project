@@ -19,6 +19,7 @@ export const initiateApp = (app, express) => {
     app.use('/coupon', allRouters.couponRouter)
     app.use('/auth', allRouters.authRouters)
     app.use('/cart', allRouters.cartRouters)
+    app.use('/order', allRouters.orderRouters)
 
 
     app.get('/', (req, res) => res.send('Hello There in our site! '))

@@ -25,6 +25,7 @@ export const asyncHandler = (API) => {
                     if (model === 'brandModel') await allModels.brandModel.findOneAndDelete(id)
                     if (model === 'userModel') await allModels.userModel.findOneAndDelete(id)
                     if (model === 'cartModel') await allModels.cartModel.findOneAndDelete(id)
+                    if (model === 'orderModel') await allModels.orderModel.findOneAndDelete(id)
                     // await allModels.model.findOneAndDelete(id)
                 }
                 res.status(500).json({ Message: "Falied" })

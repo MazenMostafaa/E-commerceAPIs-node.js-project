@@ -50,6 +50,10 @@ const couponSchema = new Schema(
                     required: true,
                     default: 1,
                 },
+                usageCount: {
+                    type: Number,
+                    default: 0,
+                }
             },
         ],
         couponAssginedToProduct: [
@@ -77,4 +81,4 @@ const couponSchema = new Schema(
     },
 )
 
-export const couponModel = model('coupon', couponSchema)
+export const couponModel = model('Coupon', couponSchema)

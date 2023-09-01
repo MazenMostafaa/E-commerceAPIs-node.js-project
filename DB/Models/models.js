@@ -5,6 +5,7 @@ import { couponModel } from '../Models/coupon.model.js'
 import { productModel } from '../Models/product.model.js'
 import { userModel } from '../Models/user.model.js'
 import { cartModel } from './cart.model.js'
+import { orderModel } from './order.model.js'
 
 
 export {
@@ -14,5 +15,6 @@ export {
     couponModel,
     productModel,
     userModel,
-    cartModel
+    cartModel,
+    orderModel
 }
