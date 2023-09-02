@@ -7,11 +7,11 @@ export const isCouponValid = async ({ couponCode, userId, next } = {}) => {
         return next(new Error('please enter a valid coupon code'))
     }
     // expiration
-    const day = moment()
+    const day = moment(new Date())
 
     if (
         coupon.couponStatus == 'Expired' ||
-        moment(coupon.toDate).isBefore(day)
+        moment(new Date(coupon.toDate)).isBefore(day)
     ) {
         return next(new Error('coupon is expired', { cause: 400 }))
     }

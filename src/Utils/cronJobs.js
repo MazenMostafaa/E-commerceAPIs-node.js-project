@@ -8,11 +8,11 @@ export const changeCouponStatusCron = () => {
         const validCoupons = await couponModel.find({ couponStatus: 'Valid' })
 
 
-        const today = moment();
+        const today = moment(new Date());
 
         for (const coupon of validCoupons) {
 
-            if (moment(coupon.toDate).isBefore(today)) {
+            if (moment(new Date(coupon.toDate)).isBefore(today)) {
                 console.log(coupon);
 
                 coupon.couponStatus = 'Expired'
