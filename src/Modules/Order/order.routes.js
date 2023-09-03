@@ -10,6 +10,6 @@ import * as validator from './order.validationSchemas.js'
 
 router.post('/', isAuth, validationCoreFunction(validator.CreateOrderSchema), asyncHandler(oc.createOrder))
 
-// router.post('/orderCart', isAuth(), asyncHandler(oc.fromCartoOrder))
+router.post('/fromCartToOrder', isAuth, validationCoreFunction(validator.FromCartToOrderSchema), asyncHandler(oc.fromCartoOrder))
 
 export default router

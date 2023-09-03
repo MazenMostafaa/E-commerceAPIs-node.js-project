@@ -1,4 +1,4 @@
-// import { cartModel } from '../../../DB/Models/cart.model.js'
+import { cartModel } from '../../../DB/Models/cart.model.js'
 import { couponModel } from '../../../DB/Models/coupon.model.js'
 import { orderModel } from '../../../DB/Models/order.model.js'
 import { productModel } from '../../../DB/Models/product.model.js'
@@ -111,8 +111,127 @@ export const createOrder = async (req, res, next) => {
         )
 
         //TODO: remove product from userCart if exist
+        const checkUserCart = await cartModel.findOne({
+            userId,
+            'products.productId': productId
+        })
+        if (checkUserCart) {
+
+            checkUserCart.products.forEach(({ productId }) => {
+
+                if (productId == req.body.productId) {
+
+                    checkUserCart.products.splice(checkUserCart.products.indexOf(productId), 1)
+                }
+            })
+
+            const updateUserCart = await cartModel.findByIdAndUpdate(checkUserCart._id, { products: checkUserCart.products })
+            if (!updateUserCart) { return next(new Error('fail to update User cart', { cause: 400 })) }
+        }
 
         return res.status(201).json({ message: 'Order is created Done', orderDB })
+    }
+    return next(new Error('fail to create your order', { cause: 400 }))
+}
+
+// =========================== create order from cart products ====================
+export const fromCartoOrder = async (req, res, next) => {
+    const userId = req.authUser._id
+    const { cartId } = req.query
+    const { address, phoneNumbers, paymentMethod, couponCode } = req.body
+
+    const cart = await cartModel.findById(cartId)
+    if (!cart || !cart.products.length) {
+        return next(new Error('please fill your cart first', { cause: 400 }))
+    }
+
+    // ======================== coupon check ================
+    if (couponCode) {
+        const coupon = await couponModel
+            .findOne({ couponCode })
+            .select('isPercentage isFixedAmount couponAmount couponAssginedToUsers')
+        const isCouponValidResult = await isCouponValid({
+            couponCode,
+            userId,
+            next,
+        })
+        if (isCouponValidResult !== true) {
+            return isCouponValidResult
+        }
+        req.coupon = coupon
+    }
+
+    let subTotal = cart.subTotal
+    //====================== paid Amount =================
+    let paidAmount = 0
+    if (req.coupon?.isPercentage) {
+        paidAmount = subTotal * (1 - (req.coupon.couponAmount || 0) / 100)
+    } else if (req.coupon?.isFixedAmount) {
+        paidAmount = subTotal - req.coupon.couponAmount
+    } else {
+        paidAmount = subTotal
+    }
+
+    //======================= paymentMethod  + orderStatus ==================
+    let orderStatus
+    paymentMethod == 'cash' ? (orderStatus = 'placed') : (orderStatus = 'pending')
+    let orderProduct = []
+    for (const product of cart.products) {
+        const productExist = await productModel.findById(product.productId)
+        orderProduct.push({
+            productId: product.productId,
+            quantity: product.quantity,
+            title: productExist.title,
+            price: productExist.priceAfterDiscount,
+            finalPrice: productExist.priceAfterDiscount * product.quantity,
+        })
+    }
+    const customId = nanoid()
+    const orderObject = {
+        userId,
+        products: orderProduct,
+        address,
+        phoneNumbers,
+        orderStatus,
+        paymentMethod,
+        subTotal,
+        paidAmount,
+        couponId: req.coupon?._id,
+        customId
+    }
+
+    req.failedDocument = {
+        model: 'orderModel',
+        id: `${customId}, ${userId}`
+    }
+
+    const orderDB = await orderModel.create(orderObject)
+    if (orderDB) {
+        // increase usageCount for coupon usage
+        if (req.coupon) {
+            for (const user of req.coupon.couponAssginedToUsers) {
+                if (user.userId.toString() == userId.toString()) {
+                    user.usageCount += 1
+                }
+            }
+            await req.coupon.save()
+        }
+
+        // decrease product's stock by order's product quantity
+        for (const product of cart.products) {
+            await productModel.findOneAndUpdate(
+                { _id: product.productId },
+                {
+                    $inc: { stock: -parseInt(product.quantity) },
+                },
+            )
+        }
+
+        //TODO: remove product from userCart if exist
+        cart.products = []
+        await cart.save()
+
+        return res.status(201).json({ message: 'Done', orderDB, cart })
     }
     return next(new Error('fail to create your order', { cause: 400 }))
 }
