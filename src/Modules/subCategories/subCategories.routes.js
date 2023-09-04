@@ -7,15 +7,16 @@ import { asyncHandler } from '../../Utils/asyncHandler.js'
 import * as validators from './subCategory.validationSchemas.js'
 import { validationCoreFunction } from '../../Middlewares/validation.js'
 import { isAuth } from '../../Middlewares/auth.js'
+import { subCategoryApisRoles } from './subCategory.endPoints.js'
 
 const router = Router({ mergeParams: true })
 
 
-router.get('/', asyncHandler(sc.getAllSubCategories))
+router.get('/', isAuth(subCategoryApisRoles.GET_ALL_SUBCATEGORY), asyncHandler(sc.getAllSubCategories))
 
 router.post(
     '/create',
-    isAuth,
+    isAuth(subCategoryApisRoles.CREATE_SUBCATEGORY),
     multerCloudFunction(allowedExtensions.Image).single('subCategoryImage'),
     validationCoreFunction(validators.createSubCategorySchema),
     asyncHandler(sc.createSubCategory),
@@ -23,14 +24,14 @@ router.post(
 
 router.put(
     '/update',
-    isAuth,
+    isAuth(subCategoryApisRoles.UPDATE_SUBCATEGORY),
     multerCloudFunction(allowedExtensions.Image).single('subCategoryImage'),
     validationCoreFunction(validators.updateSubCategorySchema),
     asyncHandler(sc.updateSubCategory),
 )
 
 router.delete('/delete',
-    isAuth,
+    isAuth(subCategoryApisRoles.DELETE_SUBCATEGORY),
     validationCoreFunction(validators.deleteCategorySchema)
     , asyncHandler(sc.deleteSubCategory))
 

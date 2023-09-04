@@ -6,17 +6,18 @@ import { allowedExtensions } from '../../Utils/allowedExtensions.js'
 import { validationCoreFunction } from '../../Middlewares/validation.js'
 import * as validators from './brand.validationSchemas.js'
 import { isAuth } from '../../Middlewares/auth.js'
+import { brandApisRoles } from './brand.endPoints.js'
 
 const router = Router()
 
 
 
 
-router.get('/', asyncHandler(bc.getAllBrands))
+router.get('/', isAuth(brandApisRoles.GET_ALL_BRAND), asyncHandler(bc.getAllBrands))
 
 router.post(
     '/create',
-    isAuth,
+    isAuth(brandApisRoles.CREATE_BRAND),
     multerCloudFunction(allowedExtensions.Image).single('logoImage'),
     validationCoreFunction(validators.createBrandSchema),
     asyncHandler(bc.addBrand),
@@ -24,13 +25,13 @@ router.post(
 
 router.put(
     '/update',
-    isAuth,
+    isAuth(brandApisRoles.UPDATE_BRAND),
     multerCloudFunction(allowedExtensions.Image).single('logoImage'),
     validationCoreFunction(validators.updateBrandSchema),
     asyncHandler(bc.updateBrand),
 )
 router.delete('/delete',
-    isAuth,
+    isAuth(brandApisRoles.DELETE_BRAND),
     validationCoreFunction(validators.deleteBrandSchema)
     , asyncHandler(bc.deleteBrand))
 

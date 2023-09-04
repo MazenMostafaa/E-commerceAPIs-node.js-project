@@ -1,6 +1,8 @@
 
 import { Schema, model } from 'mongoose'
 import pkg from 'bcrypt'
+import { systemRoles } from '../../src/Utils/systemRoles.js'
+
 const userSchema = new Schema(
     {
         userName: {
@@ -23,8 +25,8 @@ const userSchema = new Schema(
         },
         role: {
             type: String,
-            default: 'User',
-            enum: ['User', 'Admin', 'SuperAdmin'],
+            default: systemRoles.USER,
+            enum: [systemRoles.USER, systemRoles.ADMIN, systemRoles.SUPER_ADMIN],
         },
         phoneNumber: {
             type: String,

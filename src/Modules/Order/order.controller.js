@@ -4,6 +4,8 @@ import { orderModel } from '../../../DB/Models/order.model.js'
 import { productModel } from '../../../DB/Models/product.model.js'
 import { isCouponValid } from '../../Utils/couponValidation.js'
 import { customAlphabet } from 'nanoid'
+import createInvoice from '../../Utils/pdfkit.js'
+import { sendEmailService } from '../../Services/sendEmailService.js'
 const nanoid = customAlphabet('123456_=!ascbhdtel', 5)
 
 // ========================== create order =================
@@ -91,47 +93,77 @@ export const createOrder = async (req, res, next) => {
 
     const orderDB = await orderModel.create(orderObject)
 
-    if (orderDB) {
-        // increase usageCount for coupon usage
-        if (req.coupon) {
-            for (const user of req.coupon.couponAssginedToUsers) {
-                if (user.userId.toString() == userId.toString()) {
-                    user.usageCount += 1
-                }
-            }
-            await req.coupon.save()
-        }
-
-        // decrease product's stock by order's product quantity
-        await productModel.findOneAndUpdate(
-            { _id: productId },
-            {
-                $inc: { stock: -parseInt(quantity) },
-            },
-        )
-
-        //TODO: remove product from userCart if exist
-        const checkUserCart = await cartModel.findOne({
-            userId,
-            'products.productId': productId
-        })
-        if (checkUserCart) {
-
-            checkUserCart.products.forEach(({ productId }) => {
-
-                if (productId == req.body.productId) {
-
-                    checkUserCart.products.splice(checkUserCart.products.indexOf(productId), 1)
-                }
-            })
-
-            const updateUserCart = await cartModel.findByIdAndUpdate(checkUserCart._id, { products: checkUserCart.products })
-            if (!updateUserCart) { return next(new Error('fail to update User cart', { cause: 400 })) }
-        }
-
-        return res.status(201).json({ message: 'Order is created Done', orderDB })
+    if (!orderDB) {
+        return next(new Error('fail to create your order', { cause: 400 }))
     }
-    return next(new Error('fail to create your order', { cause: 400 }))
+    // increase usageCount for coupon usage
+    if (req.coupon) {
+        for (const user of req.coupon.couponAssginedToUsers) {
+            if (user.userId.toString() == userId.toString()) {
+                user.usageCount += 1
+            }
+        }
+        await req.coupon.save()
+    }
+
+    // decrease product's stock by order's product quantity
+    await productModel.findOneAndUpdate(
+        { _id: productId },
+        {
+            $inc: { stock: -parseInt(quantity) },
+        },
+    )
+
+    //  remove product from userCart if exist
+    const checkUserCart = await cartModel.findOne({
+        userId,
+        'products.productId': productId
+    })
+    if (checkUserCart) {
+
+        checkUserCart.products.forEach(({ productId }) => {
+
+            if (productId == req.body.productId) {
+
+                checkUserCart.products.splice(checkUserCart.products.indexOf(productId), 1)
+            }
+        })
+
+        const updateUserCart = await cartModel.findByIdAndUpdate(checkUserCart._id, { products: checkUserCart.products })
+        if (!updateUserCart) { return next(new Error('fail to update User cart', { cause: 400 })) }
+    }
+
+    //============================== invoice =============================
+    const orderCode = `${req.authUser.userName}_${nanoid(3)}`
+    // generat invoice object
+    const orderinvoice = {
+        shipping: {
+            name: req.authUser.userName,
+            address: orderDB.address,
+            city: 'Tanta',
+            // state: '',
+            country: 'Egypt',
+        },
+        orderCode,
+        date: orderDB.createdAt,
+        items: orderDB.products,
+        subTotal: orderDB.subTotal,
+        paidAmount: orderDB.paidAmount,
+    }
+    // fs.unlink()
+    await createInvoice(orderinvoice, `${orderCode}.pdf`)
+    await sendEmailService({
+        to: req.authUser.email,
+        subject: 'Order Confirmation',
+        message: '<h1> please find your invoice pdf below</h1>',
+        attachments: [
+            {
+                path: `./Files/${orderCode}.pdf`,
+            },
+        ],
+    })
+    return res.status(201).json({ message: 'Order is created Done', orderDB })
+
 }
 
 // =========================== create order from cart products ====================
@@ -206,32 +238,63 @@ export const fromCartoOrder = async (req, res, next) => {
     }
 
     const orderDB = await orderModel.create(orderObject)
-    if (orderDB) {
-        // increase usageCount for coupon usage
-        if (req.coupon) {
-            for (const user of req.coupon.couponAssginedToUsers) {
-                if (user.userId.toString() == userId.toString()) {
-                    user.usageCount += 1
-                }
-            }
-            await req.coupon.save()
-        }
-
-        // decrease product's stock by order's product quantity
-        for (const product of cart.products) {
-            await productModel.findOneAndUpdate(
-                { _id: product.productId },
-                {
-                    $inc: { stock: -parseInt(product.quantity) },
-                },
-            )
-        }
-
-        //TODO: remove product from userCart if exist
-        cart.products = []
-        await cart.save()
-
-        return res.status(201).json({ message: 'Done', orderDB, cart })
+    if (!orderDB) {
+        return next(new Error('fail to create your order', { cause: 400 }))
     }
-    return next(new Error('fail to create your order', { cause: 400 }))
+
+    // increase usageCount for coupon usage
+    if (req.coupon) {
+        for (const user of req.coupon.couponAssginedToUsers) {
+            if (user.userId.toString() == userId.toString()) {
+                user.usageCount += 1
+            }
+        }
+        await req.coupon.save()
+    }
+
+    // decrease product's stock by order's product quantity
+    for (const product of cart.products) {
+        await productModel.findOneAndUpdate(
+            { _id: product.productId },
+            {
+                $inc: { stock: -parseInt(product.quantity) },
+            },
+        )
+    }
+
+    //TODO: remove product from userCart if exist
+    cart.products = []
+    await cart.save()
+
+    //============================== invoice =============================
+    const orderCode = `${req.authUser.userName}_${nanoid(3)}`
+    // generat invoice object
+    const orderinvoice = {
+        shipping: {
+            name: req.authUser.userName,
+            address: orderDB.address,
+            city: 'Tanta',
+            // state: '',
+            country: 'Egypt',
+        },
+        orderCode,
+        date: orderDB.createdAt,
+        items: orderDB.products,
+        subTotal: orderDB.subTotal,
+        paidAmount: orderDB.paidAmount,
+    }
+    // fs.unlink()
+    await createInvoice(orderinvoice, `${orderCode}.pdf`)
+    await sendEmailService({
+        to: req.authUser.email,
+        subject: 'Order Confirmation',
+        message: '<h1> please find your invoice pdf below</h1>',
+        attachments: [
+            {
+                path: `./Files/${orderCode}.pdf`,
+            },
+        ],
+    })
+
+    return res.status(201).json({ message: 'Done', orderDB, cart })
 }
