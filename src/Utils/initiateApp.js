@@ -6,11 +6,11 @@ import { gracefulShutdown } from 'node-schedule'
 
 export const initiateApp = (app, express) => {
 
-    const port = process.env.PORT
+    const port = process.env.PORT || 5000
 
     connectDB()
     app.use(express.json())
-
+    app.get('/', (req, res) => res.send('Hello There in my E-commerce platform! '))
 
     app.use('/category', allRouters.categoryRouters)
     app.use('/subCategory', allRouters.subCategoryRouters)
@@ -22,7 +22,7 @@ export const initiateApp = (app, express) => {
     app.use('/order', allRouters.orderRouters)
 
 
-    app.get('/', (req, res) => res.send('Hello There in our site! '))
+
     app.all('*', (req, res) => { res.status(404).json({ Message: "404 Not fount URL" }) })
 
     app.use(globalResponse)
