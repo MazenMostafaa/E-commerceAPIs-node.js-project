@@ -5,7 +5,7 @@ import { sendEmailService } from '../../Services/sendEmailService.js'
 import { emailTemplate } from '../../Utils/emailTemplate.js'
 import { generateToken, verifyToken } from '../../Utils/tokenFunctions.js'
 import pkg from 'bcrypt'
-import { encryptionFun } from '../../Utils/encryptionFunction.js'
+import { encryptionFun, decryptionFun } from '../../Utils/encryptionFunction.js'
 
 //======================================== SignUp ===========================
 export const signUp = async (req, res, next) => {
@@ -52,12 +52,14 @@ export const signUp = async (req, res, next) => {
 
 
     // hash password => from hooks
-    // const encryptPhoneNumber = encryptionFun({ phoneNumber })
+    const encryptedPhoneNumber = encryptionFun({ phoneNumber })
 
-    // console.log(encryptPhoneNumber);
-    // if (!encryptPhoneNumber) {
-    //     return next(new Error('fail to encode phone numbers', { cause: 400 }))
-    // }
+    console.log(encryptedPhoneNumber);
+    console.log(decryptionFun({ encryptedPhoneNumber }));
+
+    if (!encryptedPhoneNumber) {
+        return next(new Error('fail to encode phone numbers', { cause: 400 }))
+    }
 
     const user = new userModel({
         userName,
@@ -65,7 +67,7 @@ export const signUp = async (req, res, next) => {
         password,
         age,
         gender,
-        phoneNumber,
+        phoneNumber: encryptedPhoneNumber,
         address,
     })
     req.failedDocument = {
@@ -76,7 +78,6 @@ export const signUp = async (req, res, next) => {
     res.status(201).json({ message: 'Done', savedUser })
 }
 // =============================== confirm email ===============================
-// search on how to save user in db in confirm email api not signUp api
 export const confirmEmail = async (req, res, next) => {
     const { token } = req.params
     const decode = verifyToken({

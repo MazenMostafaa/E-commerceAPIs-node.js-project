@@ -1,63 +1,34 @@
 import crypto from 'crypto'
 
+let secret_key = 'fd85b494-aaaa'
+let secret_iv = 'smslt'
+let encryptionMethod = 'AES-256-CBC'
+let key = crypto.createHash('sha512').update(secret_key, 'utf-8').digest('hex').substr(0, 32)
+let iv = crypto.createHash('sha512').update(secret_iv, 'utf-8').digest('hex').substr(0, 16)
+
 // =====================encryption Fun=============== 
 export const encryptionFun = ({
-    // key = procces.env.DEFAULT_KEY,
-    phoneNumber = '',
+    phoneNumber = ''
 } = {}) => {
 
+    const encryptor = crypto.createCipheriv(encryptionMethod, key, iv)
 
-    // const encodedPhoneNumbers = phoneNumber.map(phone => {
+    const ase_encrypted = encryptor.update(phoneNumber, 'utf-8', 'base64') + encryptor.final('base64')
 
-    const iv = crypto.randomBytes(16)
-
-    const key = crypto.getRandomValues(32)
-
-    const cipher = crypto.createCipheriv('AES-256-CBC', key, iv)
-
-    const encryptedPhoneNumber = cipher.update(phoneNumber) + cipher.final()
-
-    // return encryptedPhoneNumber;
-
-    if (!encryptedPhoneNumber) {
-        return next(new Error('fail to encrypt', { cause: 400 }))
-    }
-    else {
-        console.log(encryptedPhoneNumber);
-        return encryptedPhoneNumber
-
-    }
-
-    // })
-
-    // console.log(encodedPhoneNumbers) //Return an array of encrypted phones
-
-    // if (encodedPhoneNumbers.length) {
-    //     return true
-    // }
-    // else {
-    //     return false
-    // }
+    return Buffer.from(ase_encrypted).toString('base64')
 
 }
 
 // =====================decryption Fun===============
 
 export const decryptionFun = ({
-    key = procces.env.DEFAULT_KEY,
-    phoneNumber = [],
+    encryptedPhoneNumber = '',
 } = {}) => {
 
-    const decodedPhoneNumbers = phoneNumber.map(phoneNumber => {
+    const buff = Buffer.from(encryptedPhoneNumber, 'base64')
+    encryptedPhoneNumber = buff.toString('utf-8')
 
-        const cipher = crypto.createDecipheriv('AES-256-CBC', key, iv);
+    const decryptor = crypto.createDecipheriv(encryptionMethod, key, iv)
 
-        const decryptedPhoneNumber = cipher.update(phoneNumber) + cipher.final()
-
-        return decryptedPhoneNumber;
-    })
-
-    console.log(decodedPhoneNumbers)
-
-    return decodedPhoneNumbers   //Return an array of decrypted phones
+    return decryptor.update(encryptedPhoneNumber, 'base64', 'utf-8') + decryptor.final('utf-8')
 }

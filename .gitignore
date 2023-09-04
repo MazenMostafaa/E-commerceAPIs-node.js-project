@@ -1,6 +1,3 @@
 # Important tip:- download (node_modules) througout this command in your terminal
 # --> node i
 node_modules
-
-config/.env
-package-lock.json
