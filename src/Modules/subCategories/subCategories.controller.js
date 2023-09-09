@@ -53,14 +53,16 @@ export const createSubCategory = async (req, res, next) => {
         categoryId,
         createdBy: _id
     }
-    req.failedDocument = {
-        model: 'subCategoryModel',
-        id: `${customId}`
-    }
+
 
     const subCategory = await subCategoryModel.create(subCategoryObject)
+    req.failedDocument = {
+        model: subCategoryModel,
+        _id: subCategory._id
+    }
     if (!subCategory) {
         await cloudinary.uploader.destroy(public_id)
+        await cloudinary.api.delete_folder(req.imagePath)
         return next(new Error('try again later', { cause: 400 }))
     }
     res.status(201).json({ message: 'Added Done', subCategory })

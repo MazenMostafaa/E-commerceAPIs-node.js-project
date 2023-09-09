@@ -5,18 +5,19 @@ import { asyncHandler } from '../../Utils/asyncHandler.js'
 import { validationCoreFunction } from '../../Middlewares/validation.js'
 import * as validator from './coupon.validationSchemas.js'
 import { isAuth } from '../../Middlewares/auth.js'
+import { couponApisRoles } from './coupon.endPoints.js'
 
+
+router.use(isAuth(couponApisRoles.COUPON_ROLES))
 
 router.post(
     '/create',
-    isAuth,
     validationCoreFunction(validator.addCouponSchema),
     asyncHandler(cc.addCoupon),
 )
 
 router.delete(
     '/delete',
-    isAuth,
     validationCoreFunction(validator.deleteCouponSchem),
     asyncHandler(cc.deleteCoupon),
 )

@@ -47,13 +47,16 @@ export const createCategory = async (req, res, next) => {
         createdBy: _id
     }
 
-    req.failedDocument = {
-        model: 'categoryModel',
-        id: `${customId}`
-    }
+
     const category = await categoryModel.create(categoryObject)
+    req.failedDocument = {
+        model: categoryModel,
+        _id: category._id
+    }
+
     if (!category) {
         await cloudinary.uploader.destroy(public_id)
+        await cloudinary.api.delete_folder(req.imagePath)
         return next(
             new Error('try again later , fail to add your category', { cause: 400 }),
         )

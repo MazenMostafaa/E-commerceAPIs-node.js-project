@@ -1,5 +1,4 @@
 import cloudinary from './cloudinaryConfig.js'
-import * as allModels from '../../DB/Models/models.js'
 
 export const asyncHandler = (API) => {
     return (req, res, next) => {
@@ -17,16 +16,8 @@ export const asyncHandler = (API) => {
                 console.log(req.failedDocument);
                 // =========== Delete from DB ==============
                 if (req.failedDocument) {
-                    const { model, id } = req.failedDocument
-                    if (model === 'productModel') await allModels.productModel.findOneAndDelete(id)
-                    if (model === 'categoryModel') await allModels.categoryModel.findOneAndDelete(id)
-                    if (model === 'subCategoryModel') await allModels.subCategoryModel.findOneAndDelete(id)
-                    if (model === 'couponModel') await allModels.couponModel.findOneAndDelete(id)
-                    if (model === 'brandModel') await allModels.brandModel.findOneAndDelete(id)
-                    if (model === 'userModel') await allModels.userModel.findOneAndDelete(id)
-                    if (model === 'cartModel') await allModels.cartModel.findOneAndDelete(id)
-                    if (model === 'orderModel') await allModels.orderModel.findOneAndDelete(id)
-                    // await allModels.model.findOneAndDelete(id)
+                    const { model, _id } = req.failedDocument
+                    await model.findByIdAndDelete(_id)
                 }
                 res.status(500).json({ Message: "Falied" })
             })

@@ -82,14 +82,16 @@ export const addProduct = async (req, res, next) => {
         createdBy: _id
     }
 
-    req.failedDocument = {
-        model: 'productModel',
-        id: `${customId}`
-    }
+
     const product = await productModel.create(productObject)
+    req.failedDocument = {
+        model: productModel,
+        _id: product._id
+    }
 
     if (!product) {
         await cloudinary.api.delete_resources(publicIds)
+        await cloudinary.api.delete_folder(req.imagePath)
         return next(new Error('trye again later', { cause: 400 }))
     }
     res.status(200).json({ message: 'Done', product })
@@ -202,6 +204,8 @@ export const updateProduct = async (req, res, next) => {
         }
         await cloudinary.api.delete_resources(public_ids)
         product.Images = ImageArr
+        // }
+
     }
 
     if (title) {

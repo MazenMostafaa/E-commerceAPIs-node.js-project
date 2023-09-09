@@ -6,7 +6,9 @@ import { isCouponValid } from '../../Utils/couponValidation.js'
 import { customAlphabet } from 'nanoid'
 import createInvoice from '../../Utils/pdfkit.js'
 import { sendEmailService } from '../../Services/sendEmailService.js'
+import { qrCodeFunction } from '../../Utils/qrCodeFunction.js'
 const nanoid = customAlphabet('123456_=!ascbhdtel', 5)
+import { encryptionFun, decryptionFun } from '../../Utils/encryptionFunction.js'
 
 // ========================== create order =================
 export const createOrder = async (req, res, next) => {
@@ -63,7 +65,7 @@ export const createOrder = async (req, res, next) => {
     let paidAmount = 0
     if (req.coupon?.isPercentage) {
         paidAmount = subTotal * (1 - (req.coupon.couponAmount || 0) / 100)
-    } else if (req.coupon?.isFixedAmount) {
+    } else if (req.coupon?.isFixedAmount && req.coupon?.couponAmount <= subTotal) {
         paidAmount = subTotal - req.coupon.couponAmount
     } else {
         paidAmount = subTotal
@@ -73,12 +75,16 @@ export const createOrder = async (req, res, next) => {
     let orderStatus
     paymentMethod == 'cash' ? (orderStatus = 'placed') : (orderStatus = 'pending')
 
+    const encryptedPhoneNumbers = encryptionFun({ phoneNumber: phoneNumbers })
+    console.log(encryptedPhoneNumbers)
+    // console.log(decryptionFun({ encryptedPhoneNumber: encryptedPhoneNumbers }));
+
     const customId = nanoid()
     const orderObject = {
         userId,
         products,
         address,
-        phoneNumbers,
+        phoneNumbers: encryptedPhoneNumbers,
         orderStatus,
         paymentMethod,
         subTotal,
@@ -87,7 +93,7 @@ export const createOrder = async (req, res, next) => {
         customId
     }
     req.failedDocument = {
-        model: 'orderModel',
+        model: orderModel,
         id: `${customId}, ${userId}`
     }
 
@@ -133,6 +139,9 @@ export const createOrder = async (req, res, next) => {
         if (!updateUserCart) { return next(new Error('fail to update User cart', { cause: 400 })) }
     }
 
+    const orderQr = await qrCodeFunction({
+        data: { orderId: orderDB._id, products: orderDB.products },
+    })
     //============================== invoice =============================
     const orderCode = `${req.authUser.userName}_${nanoid(3)}`
     // generat invoice object
@@ -162,7 +171,7 @@ export const createOrder = async (req, res, next) => {
             },
         ],
     })
-    return res.status(201).json({ message: 'Order is created Done', orderDB })
+    return res.status(201).json({ message: 'Order is created Done', orderDB, orderQr })
 
 }
 
@@ -198,7 +207,7 @@ export const fromCartoOrder = async (req, res, next) => {
     let paidAmount = 0
     if (req.coupon?.isPercentage) {
         paidAmount = subTotal * (1 - (req.coupon.couponAmount || 0) / 100)
-    } else if (req.coupon?.isFixedAmount) {
+    } else if (req.coupon?.isFixedAmount && req.coupon?.couponAmount <= subTotal) {
         paidAmount = subTotal - req.coupon.couponAmount
     } else {
         paidAmount = subTotal
@@ -218,12 +227,15 @@ export const fromCartoOrder = async (req, res, next) => {
             finalPrice: productExist.priceAfterDiscount * product.quantity,
         })
     }
+    const encryptedPhoneNumbers = encryptionFun({ phoneNumber: phoneNumbers })
+    console.log(encryptedPhoneNumbers)
+
     const customId = nanoid()
     const orderObject = {
         userId,
         products: orderProduct,
         address,
-        phoneNumbers,
+        phoneNumbers: encryptedPhoneNumbers,
         orderStatus,
         paymentMethod,
         subTotal,
@@ -232,12 +244,13 @@ export const fromCartoOrder = async (req, res, next) => {
         customId
     }
 
-    req.failedDocument = {
-        model: 'orderModel',
-        id: `${customId}, ${userId}`
-    }
+
 
     const orderDB = await orderModel.create(orderObject)
+    req.failedDocument = {
+        model: orderModel,
+        _id: orderDB._id
+    }
     if (!orderDB) {
         return next(new Error('fail to create your order', { cause: 400 }))
     }
@@ -262,10 +275,12 @@ export const fromCartoOrder = async (req, res, next) => {
         )
     }
 
-    //TODO: remove product from userCart if exist
     cart.products = []
     await cart.save()
 
+    const orderQr = await qrCodeFunction({
+        data: { orderId: orderDB._id, products: orderDB.products },
+    })
     //============================== invoice =============================
     const orderCode = `${req.authUser.userName}_${nanoid(3)}`
     // generat invoice object
@@ -296,5 +311,5 @@ export const fromCartoOrder = async (req, res, next) => {
         ],
     })
 
-    return res.status(201).json({ message: 'Done', orderDB, cart })
+    return res.status(201).json({ message: 'Done', orderDB, orderQr, cart })
 }

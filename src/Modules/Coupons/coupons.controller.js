@@ -55,12 +55,13 @@ export const addCoupon = async (req, res, next) => {
         // couponAssginedToProduct,
         createdBy: _id,
     }
-    req.failedDocument = {
-        model: 'couponModel',
-        id: `${couponCode}`
-    }
+
 
     const couponDb = await couponModel.create(couponObject)
+    req.failedDocument = {
+        model: couponModel,
+        _id: couponDb._id
+    }
     if (!couponDb) {
         return next(new Error('fail to add coupon', { cause: 400 }))
     }

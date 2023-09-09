@@ -8,27 +8,62 @@ let iv = crypto.createHash('sha512').update(secret_iv, 'utf-8').digest('hex').su
 
 // =====================encryption Fun=============== 
 export const encryptionFun = ({
-    phoneNumber = ''
+    phoneNumber = '' || []
 } = {}) => {
 
-    const encryptor = crypto.createCipheriv(encryptionMethod, key, iv)
+    // ====== Only one number ==========
+    if (!Array.isArray(phoneNumber)) {
 
-    const ase_encrypted = encryptor.update(phoneNumber, 'utf-8', 'base64') + encryptor.final('base64')
+        const encryptor = crypto.createCipheriv(encryptionMethod, key, iv)
 
-    return Buffer.from(ase_encrypted).toString('base64')
+        const ase_encrypted = encryptor.update(phoneNumber, 'utf-8', 'base64') + encryptor.final('base64')
 
+        return Buffer.from(ase_encrypted).toString('base64')
+    }
+
+    // ====== Array of numbers ==========
+    let encryptedArr = []
+    for (const number of phoneNumber) {
+        const encryptor = crypto.createCipheriv(encryptionMethod, key, iv)
+
+        const ase_encrypted = encryptor.update(number, 'utf-8', 'base64') + encryptor.final('base64')
+
+        encryptedArr.push(Buffer.from(ase_encrypted).toString('base64'))
+
+    }
+
+    return encryptedArr
 }
 
 // =====================decryption Fun===============
 
 export const decryptionFun = ({
-    encryptedPhoneNumber = '',
+    encryptedPhoneNumber = '' || [],
 } = {}) => {
 
-    const buff = Buffer.from(encryptedPhoneNumber, 'base64')
-    encryptedPhoneNumber = buff.toString('utf-8')
+    if (!Array.isArray(encryptedPhoneNumber)) {
 
-    const decryptor = crypto.createDecipheriv(encryptionMethod, key, iv)
+        const buff = Buffer.from(encryptedPhoneNumber, 'base64')
 
-    return decryptor.update(encryptedPhoneNumber, 'base64', 'utf-8') + decryptor.final('utf-8')
+        encryptedPhoneNumber = buff.toString('utf-8')
+
+        const decryptor = crypto.createDecipheriv(encryptionMethod, key, iv)
+
+        return decryptor.update(encryptedPhoneNumber, 'base64', 'utf-8') + decryptor.final('utf-8')
+
+    }
+
+    let decryptedArr = []
+    for (let number of encryptedPhoneNumber) {
+
+        const buff = Buffer.from(number, 'base64')
+
+        number = buff.toString('utf-8')
+
+        const decryptor = crypto.createDecipheriv(encryptionMethod, key, iv)
+
+        decryptedArr.push(decryptor.update(number, 'base64', 'utf-8') + decryptor.final('utf-8'))
+
+    }
+    return decryptedArr
 }

@@ -70,11 +70,12 @@ export const signUp = async (req, res, next) => {
         phoneNumber: encryptedPhoneNumber,
         address,
     })
-    req.failedDocument = {
-        model: 'userModel',
-        id: `${email}`
-    }
+
     const savedUser = await user.save()
+    req.failedDocument = {
+        model: userModel,
+        _id: user._id
+    }
     res.status(201).json({ message: 'Done', savedUser })
 }
 // =============================== confirm email ===============================

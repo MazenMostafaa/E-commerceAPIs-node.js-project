@@ -56,10 +56,7 @@ export const addToCart = async (req, res, next) => {
         return res.status(200).json({ message: 'Done', newCart })
     }
 
-    req.failedDocument = {
-        model: 'cartModel',
-        id: `${userId}`
-    }
+
     const cartObject = {
         userId,
         products: [{ productId, quantity }],
@@ -67,6 +64,10 @@ export const addToCart = async (req, res, next) => {
     }
 
     const cartDB = await cartModel.create(cartObject)
+    req.failedDocument = {
+        model: cartModel,
+        _id: cartDB._id
+    }
 
     res.status(201).json({ message: 'Done', cartDB })
 }

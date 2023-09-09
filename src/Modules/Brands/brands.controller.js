@@ -56,13 +56,14 @@ export const addBrand = async (req, res, next) => {
         createdBy: _id
     }
 
-    req.failedDocument = {
-        model: 'brandModel',
-        id: `${customId}`
-    }
     const dbBrand = await brandModel.create(brandObject)
+    req.failedDocument = {
+        model: brandModel,
+        _id: dbBrand._id
+    }
     if (!dbBrand) {
         await cloudinary.uploader.destroy(public_id)
+        await cloudinary.api.delete_folder(req.imagePath)
         return next(new Error('try again later', { cause: 400 }))
     }
     res.status(201).json({ message: 'CreatedDone', dbBrand })
