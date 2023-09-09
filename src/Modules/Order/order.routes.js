@@ -7,10 +7,14 @@ import { validationCoreFunction } from '../../Middlewares/validation.js'
 import * as validator from './order.validationSchemas.js'
 import { orderApisRoles } from './order.endPoints.js'
 
-router.use(isAuth(orderApisRoles.GENERATE_ORDER))
 
-router.post('/', validationCoreFunction(validator.CreateOrderSchema), asyncHandler(oc.createOrder))
+router.post('/', isAuth(orderApisRoles.GENERATE_ORDER), validationCoreFunction(validator.CreateOrderSchema), asyncHandler(oc.createOrder))
 
-router.post('/fromCartToOrder', validationCoreFunction(validator.FromCartToOrderSchema), asyncHandler(oc.fromCartoOrder))
+router.post('/fromCartToOrder', isAuth(orderApisRoles.GENERATE_ORDER), validationCoreFunction(validator.FromCartToOrderSchema), asyncHandler(oc.fromCartoOrder))
+
+router.put('/successOrder', asyncHandler(oc.successPayment))
+
+router.patch('/cancelOrder', asyncHandler(oc.cancelPayment))
+
 
 export default router
