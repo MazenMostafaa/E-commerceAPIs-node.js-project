@@ -33,11 +33,6 @@ const couponSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'User',
         },
-        deletedBy: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-        },
-
         couponAssginedToUsers: [
             {
                 userId: {

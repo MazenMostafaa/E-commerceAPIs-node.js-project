@@ -15,6 +15,9 @@ router.post(
     validationCoreFunction(validator.addCouponSchema),
     asyncHandler(cc.addCoupon),
 )
+router.put('/update',
+    validationCoreFunction(validator.updateCouponSchema),
+    asyncHandler(cc.UpdateCoupon))
 
 router.delete(
     '/delete',
