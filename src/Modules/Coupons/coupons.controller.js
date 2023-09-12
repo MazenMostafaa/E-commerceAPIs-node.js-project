@@ -127,32 +127,46 @@ export const UpdateCoupon = async (req, res, next) => {
     }
 
     //======================== assgin to users ==================
-    // if (couponAssginedToUsers) {
-    //     let usersIds = []
-    //     let newUsers = []
-    //     for (const user of couponAssginedToUsers) {
-    //         // Add new Assigned user
-    //         if (!isCouponExist.couponAssginedToUsers.includes(user.userId)) {
-    //             usersIds.push(user.userId)
-    //             newUsers.push(user)
-    //         }
-    //         isCouponExist.couponAssginedToUsers.maxUsage = couponAssginedToUsers.maxUsage
-    //     }
+    if (couponAssginedToUsers) {
+        let usersIds = []
+        let newUsers = []
+        let updateMaxUsage = []
+        for (const user of couponAssginedToUsers) {
 
-    //     const usersCheck = await userModel.find({
-    //         _id: {
-    //             $in: usersIds,
-    //         },
-    //     })
+            //=============== Add new Assigned user ===================
+            if (!isCouponExist.couponAssginedToUsers.includes(user.userId)) {
+                usersIds.push(user.userId)
+                newUsers.push(user)
+            }
+            // =============== Push to updateMaxUsage ===============
+            updateMaxUsage.push(user)
+        }
 
-    //     if (usersIds.length !== usersCheck.length) {
-    //         return next(new Error('invalid userIds', { cause: 400 }))
-    //     }
+        // =========== Check Id have been entered ================
+        const usersCheck = await userModel.find({
+            _id: {
+                $in: usersIds,
+            },
+        })
 
-    //     newUsers = [...isCouponExist.couponAssginedToUsers]
-    //     isCouponExist.couponAssginedToUsers = newUsers
+        if (usersIds.length !== usersCheck.length) {
+            return next(new Error('invalid userIds', { cause: 400 }))
+        }
+        isCouponExist.couponAssginedToUsers = isCouponExist.couponAssginedToUsers.concat(newUsers)
 
-    // }
+        if (updateMaxUsage.length) {
+            for (let obj = 0; obj < updateMaxUsage.length; obj++) {
+                const { userId, maxUsage } = updateMaxUsage
+                isCouponExist.couponAssginedToUsers = isCouponExist.couponAssginedToUsers.map((item) => {
+                    if (item.userId === userId) {
+                        item.maxUsage = maxUsage ? item.usageCount <= maxUsage : item.maxUsage;
+                    }
+                })
+
+            }
+        }
+    }
+
 
 
     isCouponExist.updatedBy = _id

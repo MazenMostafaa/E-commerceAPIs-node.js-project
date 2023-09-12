@@ -37,7 +37,8 @@ const subCategorySchema = new Schema(
         },
         categoryId: {
             type: Schema.Types.ObjectId,
-            ref: 'Category',
+            refPath: 'Category',
+            // ref: 'Category',
             required: true,
         },
         customId: String,

@@ -51,12 +51,6 @@ const couponSchema = new Schema(
                 }
             },
         ],
-        couponAssginedToProduct: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'Product',
-            },
-        ],
         fromDate: {
             type: String,
             required: true,
