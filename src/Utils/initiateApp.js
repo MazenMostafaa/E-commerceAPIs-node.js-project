@@ -20,7 +20,7 @@ export const initiateApp = (app, express) => {
     app.use('/auth', allRouters.authRouters)
     app.use('/cart', allRouters.cartRouters)
     app.use('/order', allRouters.orderRouters)
-
+    app.use('/review', allRouters.reviewRouter)
 
 
     app.all('*', (req, res) => { res.status(404).json({ Message: "404 Not fount URL" }) })

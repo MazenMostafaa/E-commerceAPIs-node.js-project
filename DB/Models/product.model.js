@@ -84,9 +84,23 @@ const productSchema = new Schema(
                 },
             },
         ],
+        //================= rate ============
+        rate: {
+            type: Number,
+            default: 0,
+        },
         customId: String,
     },
-    { timestamps: true },
+    {
+        timestamps: true,
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true }
+    },
 )
+productSchema.virtual('Reviews', {
+    ref: 'Review',
+    foreignField: 'productId',
+    localField: '_id',
+})
 
 export const productModel = model('Product', productSchema)

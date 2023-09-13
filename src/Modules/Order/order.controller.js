@@ -66,9 +66,16 @@ export const createOrder = async (req, res, next) => {
     const subTotal = productObject.finalPrice
     //====================== paid Amount =================
     let paidAmount = 0
+
+    if (req.coupon?.isFixedAmount &&
+        req.coupon?.couponAmount > subTotal) {
+        return next(
+            new Error('please add an addtional item to use this coupon', { cause: 400 }),
+        )
+    }
     if (req.coupon?.isPercentage) {
         paidAmount = subTotal * (1 - (req.coupon.couponAmount || 0) / 100)
-    } else if (req.coupon?.isFixedAmount && req.coupon?.couponAmount <= subTotal) {
+    } else if (req.coupon?.isFixedAmount) {
         paidAmount = subTotal - req.coupon.couponAmount
     } else {
         paidAmount = subTotal
@@ -254,9 +261,15 @@ export const fromCartoOrder = async (req, res, next) => {
     let subTotal = cart.subTotal
     //====================== paid Amount =================
     let paidAmount = 0
+    if (req.coupon?.isFixedAmount &&
+        req.coupon?.couponAmount > subTotal) {
+        return next(
+            new Error('please add an addtional item to use this coupon', { cause: 400 }),
+        )
+    }
     if (req.coupon?.isPercentage) {
         paidAmount = subTotal * (1 - (req.coupon.couponAmount || 0) / 100)
-    } else if (req.coupon?.isFixedAmount && req.coupon?.couponAmount <= subTotal) {
+    } else if (req.coupon?.isFixedAmount) {
         paidAmount = subTotal - req.coupon.couponAmount
     } else {
         paidAmount = subTotal
@@ -388,10 +401,10 @@ export const cancelPayment = async (req, res, next) => {
         return next(new Error('invalid order id', { cause: 400 }))
     }
 
-    //=============== approch one orderSattus:'canceled'
+    //=============== approch one orderSattus:'canceled' =============
     order.orderStatus = 'canceled'
     await order.save()
-    //================ delete from db
+    //================ delete from db ================
     // await orderModel.findOneAndDelete({ _id: decodeData.orderId })
 
     //=================== undo prouducts  and coupon  ====================
@@ -415,4 +428,27 @@ export const cancelPayment = async (req, res, next) => {
         await coupon.save()
     }
     res.status(200).json({ message: 'done', order })
+}
+
+export const deliverOrder = async (req, res, next) => {
+    const { orderId } = req.query
+
+    const order = await orderModel.findOneAndUpdate(
+        {
+            _id: orderId,
+            orderStatus: { $nin: ['delivered', 'pending', 'canceled', 'rejected'] },
+        },
+        {
+            orderStatus: 'delivered',
+        },
+        {
+            new: true,
+        },
+    )
+
+    if (!order) {
+        return next(new Error('invalid order', { cause: 400 }))
+    }
+
+    return res.status(200).json({ message: 'Done', order })
 }

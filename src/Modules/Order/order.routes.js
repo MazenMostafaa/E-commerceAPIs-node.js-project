@@ -8,13 +8,27 @@ import * as validator from './order.validationSchemas.js'
 import { orderApisRoles } from './order.endPoints.js'
 
 
-router.post('/', isAuth(orderApisRoles.GENERATE_ORDER), validationCoreFunction(validator.CreateOrderSchema), asyncHandler(oc.createOrder))
+router.post(
+    '/',
+    isAuth(orderApisRoles.GENERATE_ORDER),
+    validationCoreFunction(validator.CreateOrderSchema),
+    asyncHandler(oc.createOrder))
 
-router.post('/fromCartToOrder', isAuth(orderApisRoles.GENERATE_ORDER), validationCoreFunction(validator.FromCartToOrderSchema), asyncHandler(oc.fromCartoOrder))
+router.post(
+    '/fromCartToOrder',
+    isAuth(orderApisRoles.GENERATE_ORDER),
+    validationCoreFunction(validator.FromCartToOrderSchema),
+    asyncHandler(oc.fromCartoOrder))
+
 
 router.put('/successOrder', asyncHandler(oc.successPayment))
 
 router.patch('/cancelOrder', asyncHandler(oc.cancelPayment))
 
-
+router.patch(
+    '/delivered',
+    isAuth(orderApisRoles.DELIVERE_ORDER),
+    validationCoreFunction(validator.DeliveredSchema),
+    asyncHandler(oc.deliverOrder)
+)
 export default router

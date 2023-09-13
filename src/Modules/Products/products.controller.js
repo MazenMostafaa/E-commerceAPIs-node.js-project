@@ -264,7 +264,12 @@ export const deleteProduct = async (req, res, next) => {
 export const getAllProd = async (req, res, next) => {
     const { page, size } = req.query
     const { limit, skip } = paginationFunction({ page, size })
-    const products = await productModel.find().limit(limit).skip(skip)
+    const products = await productModel.find().limit(limit).skip(skip).populate([
+        {
+            path: 'Reviews',
+            select: 'reviewRate reviewComment -productId'
+        }
+    ])
     res.status(200).json({ message: 'Done', products })
 }
 
@@ -283,6 +288,12 @@ export const getProductsByTitle = async (req, res, next) => {
         })
         .limit(limit)
         .skip(skip)
+        .populate([
+            {
+                path: 'Reviews',
+                select: 'reviewRate reviewComment -productId'
+            }
+        ])
     res.status(200).json({ message: 'Done', productsc })
 }
 
@@ -293,6 +304,7 @@ export const listProducts = async (req, res, next) => {
         .pagination()
         .filters()
         .sort()
+        .select()
     const products = await ApiFeaturesInstance.mongooseQuery
     res.status(200).json({ message: 'Done', products })
 }

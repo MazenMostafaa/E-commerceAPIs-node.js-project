@@ -29,3 +29,9 @@ export const FromCartToOrderSchema = {
         cartId: generalFields.userid.required()
     })
 }
+
+export const DeliveredSchema = {
+    query: joi.object({
+        orderId: generalFields.userid.required()
+    }).required()
+}
