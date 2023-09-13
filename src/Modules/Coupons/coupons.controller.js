@@ -137,6 +137,7 @@ export const UpdateCoupon = async (req, res, next) => {
             if (!isCouponExist.couponAssginedToUsers.includes(user.userId)) {
                 usersIds.push(user.userId)
                 newUsers.push(user)
+                continue
             }
             // =============== Push to updateMaxUsage ===============
             updateMaxUsage.push(user)
@@ -152,11 +153,14 @@ export const UpdateCoupon = async (req, res, next) => {
         if (usersIds.length !== usersCheck.length) {
             return next(new Error('invalid userIds', { cause: 400 }))
         }
-        isCouponExist.couponAssginedToUsers = isCouponExist.couponAssginedToUsers.concat(newUsers)
+
+        if (newUsers.length) {
+            isCouponExist.couponAssginedToUsers = isCouponExist.couponAssginedToUsers.concat(newUsers)
+        }
 
         if (updateMaxUsage.length) {
             for (let obj = 0; obj < updateMaxUsage.length; obj++) {
-                const { userId, maxUsage } = updateMaxUsage
+                const { userId, maxUsage } = updateMaxUsage[obj]
                 isCouponExist.couponAssginedToUsers = isCouponExist.couponAssginedToUsers.map((item) => {
                     if (item.userId === userId) {
                         item.maxUsage = maxUsage ? item.usageCount <= maxUsage : item.maxUsage;
