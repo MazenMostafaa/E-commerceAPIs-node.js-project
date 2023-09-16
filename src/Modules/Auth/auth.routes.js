@@ -10,6 +10,7 @@ router.post('/signUp', validationCoreFunction(validators.signUpSchema), asyncHan
 router.get('/confirm/:token', asyncHandler(ac.confirmEmail))
 
 router.post('/logIn', validationCoreFunction(validators.logInSchema), asyncHandler(ac.logIn))
+router.post('/loginWithGmail', asyncHandler(ac.loginWithGmail))
 
 router.post('/forget', validationCoreFunction(validators.forgetPasswordSchema), asyncHandler(ac.forgetPassword))
 router.post('/reset/:token', validationCoreFunction(validators.resetPasswordSchema), asyncHandler(ac.resetPassword))

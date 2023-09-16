@@ -6,6 +6,7 @@ import { emailTemplate } from '../../Utils/emailTemplate.js'
 import { generateToken, verifyToken } from '../../Utils/tokenFunctions.js'
 import pkg from 'bcrypt'
 import { encryptionFun, decryptionFun } from '../../Utils/encryptionFunction.js'
+import { OAuth2Client } from 'google-auth-library'
 
 //======================================== SignUp ===========================
 export const signUp = async (req, res, next) => {
@@ -69,6 +70,7 @@ export const signUp = async (req, res, next) => {
         gender,
         phoneNumber: encryptedPhoneNumber,
         address,
+        provider: 'System'
     })
 
     const savedUser = await user.save()
@@ -205,4 +207,75 @@ export const resetPassword = async (req, res, next) => {
 
     const resetedPassData = await user.save()
     res.status(200).json({ message: 'Done', resetedPassData })
+}
+
+// ===========================Social Log-In With GOOGLE==================
+export const loginWithGmail = async (req, res, next) => {
+    const client = new OAuth2Client()
+    const { idToken } = req.body
+    async function verify() {
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: process.env.CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+            // Or, if multiple clients access the backend:
+            //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+        })
+        const payload = ticket.getPayload()
+        return payload
+    }
+    const { email_verified, email, name } = await verify()
+    if (!email_verified) {
+        return next(new Error('invalid email', { cause: 400 }))
+    }
+    const user = await userModel.findOne({ email, provider: 'GOOGLE' })
+    //login
+    if (user) {
+        const token = generateToken({
+            payload: {
+                email,
+                _id: user._id,
+                role: user.role,
+            },
+            signature: process.env.SIGN_IN_TOKEN_SECRET,
+            expiresIn: '1h',
+        })
+
+        const userUpdated = await userModel.findOneAndUpdate(
+            { email },
+            {
+                token,
+                status: 'Online',
+            },
+            {
+                new: true,
+            },
+        )
+        return res.status(200).json({ messge: 'Login done', userUpdated, token })
+    }
+
+    // signUp
+    const userObject = {
+        userName: name,
+        email,
+        password: nanoid(3),
+        provider: 'GOOGLE',
+        isConfirmed: true,
+        phoneNumber: ' ',
+        address: [' '],
+        role: 'User',
+    }
+    const newUser = await userModel.create(userObject)
+    const token = generateToken({
+        payload: {
+            email: newUser.email,
+            _id: newUser._id,
+            role: newUser.role,
+        },
+        signature: process.env.SIGN_IN_TOKEN_SECRET,
+        expiresIn: '1h',
+    })
+    newUser.token = token
+    newUser.status = 'Online'
+    await newUser.save()
+    res.status(200).json({ message: 'Verified', newUser, Token: newUser.token })
 }

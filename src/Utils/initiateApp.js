@@ -3,6 +3,7 @@ import { connectDB } from '../../DB/connection.js'
 import * as allRouters from '../Modules/index.routers.js'
 import { changeCouponStatusCron } from './cronJobs.js'
 import { gracefulShutdown } from 'node-schedule'
+import cors from 'cors'
 
 export const initiateApp = (app, express) => {
 
@@ -10,6 +11,8 @@ export const initiateApp = (app, express) => {
 
     connectDB()
     app.use(express.json())
+    // cors policy
+    app.use(cors())
     app.get('/', (req, res) => res.send('Hello There in my E-commerce platform! '))
 
     app.use('/category', allRouters.categoryRouters)

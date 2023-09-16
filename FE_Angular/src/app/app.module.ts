@@ -1,6 +1,6 @@
-import { NgModule ,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {HttpClientModule} from "@angular/common/http"
+import { HttpClientModule } from "@angular/common/http"
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,7 +14,7 @@ import {
   declarations: [
     AppComponent
   ],
-imports: [
+  imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -32,7 +32,7 @@ imports: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '196802727327-h5hk5cg9auil9npns34vhgr7e236e7f8.apps.googleusercontent.com'
+              '61068752015-6tcka11t320h2rqmv9n6bgjsd5cas3c3.apps.googleusercontent.com'
             )
           },
           // {
