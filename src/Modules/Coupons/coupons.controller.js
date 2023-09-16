@@ -131,16 +131,26 @@ export const UpdateCoupon = async (req, res, next) => {
         let usersIds = []
         let newUsers = []
         let updateMaxUsage = []
+
         for (const user of couponAssginedToUsers) {
 
             //=============== Add new Assigned user ===================
-            if (!isCouponExist.couponAssginedToUsers.includes(user.userId)) {
+
+            if (isCouponExist.couponAssginedToUsers.find((obj) => {
+                user.userId === obj.userId
+            })) {
+                updateMaxUsage.push(user)
+                console.log({ "update User": updateMaxUsage });
+                // continue
+            } else {
                 usersIds.push(user.userId)
                 newUsers.push(user)
-                continue
+                console.log(
+                    { "Add user": newUsers }
+                );
             }
             // =============== Push to updateMaxUsage ===============
-            updateMaxUsage.push(user)
+
         }
 
         // =========== Check Id have been entered ================
