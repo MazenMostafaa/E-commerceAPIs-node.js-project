@@ -316,6 +316,52 @@ export const fromCartoOrder = async (req, res, next) => {
     if (!orderDB) {
         return next(new Error('fail to create your order', { cause: 400 }))
     }
+    // ======================= payment ================================
+    let orderSession
+    if (orderDB.paymentMethod == 'card') {
+        if (req.coupon) {
+            const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+            let coupon
+            if (req.coupon.isPercentage) {
+                coupon = await stripe.coupons.create({
+                    percent_off: req.coupon.couponAmount,
+                })
+            }
+            if (req.coupon.isFixedAmount) {
+                coupon = await stripe.coupons.create({
+                    amount_off: req.coupon.couponAmount * 100,
+                    currency: 'EGP',
+                })
+            }
+            req.couponId = coupon.id
+        }
+        const tokenOrder = generateToken({
+            payload: { orderId: orderDB._id },
+            signature: process.env.ORDER_TOKEN,
+            expiresIn: '1h',
+        })
+        orderSession = await paymentFunction({
+            payment_method_types: [orderDB.paymentMethod],
+            mode: 'payment',
+            customer_email: req.authUser.email,
+            metadata: { orderId: orderDB._id.toString() },
+            success_url: `${req.protocol}://${req.headers.host}/order/successOrder?token=${tokenOrder}`,
+            cancel_url: `${req.protocol}://${req.headers.host}/order/cancelOrder?token=${tokenOrder}`,
+            line_items: orderDB.products.map((ele) => {
+                return {
+                    price_data: {
+                        currency: 'EGP',
+                        product_data: {
+                            name: ele.title,
+                        },
+                        unit_amount: ele.price * 100,
+                    },
+                    quantity: ele.quantity,
+                }
+            }),
+            discounts: req.couponId ? [{ coupon: req.couponId }] : [],
+        })
+    }
 
     // increase usageCount for coupon usage
     if (req.coupon) {

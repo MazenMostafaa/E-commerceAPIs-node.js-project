@@ -36,7 +36,8 @@ export const updateCouponSchema = {
         isPercentage: joi.boolean().optional(),
         isFixedAmount: joi.boolean().optional(),
         couponStatus: joi.string().valid('Expired', 'Valid').optional(),
-        couponAssginedToUsers: joi.array().items().min(1).unique().optional()
+        userId: generalFields.userid.optional(),
+        maxUsage: joi.number().positive().min(1).integer()
     }).required(),
 
     query: joi.object({

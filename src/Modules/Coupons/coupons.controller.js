@@ -80,21 +80,24 @@ export const UpdateCoupon = async (req, res, next) => {
         fromDate,
         toDate,
         isFixedAmount,
-        couponAssginedToUsers
+        userId,
+        maxUsage
     } = req.body
 
     // check existing of coupon
     const isCouponExist = await couponModel.findOne({
         _id: couponId,
         createdBy: _id
-    })
+    }).lean()
+    const updatedDocument = await couponModel.hydrate(isCouponExist)
+
     if (!isCouponExist) {
         return next(new Error('Invalid Coupon Id', { cause: 400 }))
     }
 
     if (couponCode) {
 
-        if (isCouponExist.couponCode == couponCode.toLowerCase()) {
+        if (updatedDocument.couponCode == couponCode.toLowerCase()) {
             return next(new Error('please enter different name from the old coupon name', { cause: 400 }))
         }
         // check coupon code if it's duplicate
@@ -102,92 +105,63 @@ export const UpdateCoupon = async (req, res, next) => {
             return next(new Error('duplicate couponCode', { cause: 400 }))
         }
 
-        isCouponExist.couponCode = couponCode
+        updatedDocument.couponCode = couponCode
     }
 
-    if (couponAmount) isCouponExist.couponAmount = couponAmount
+    if (couponAmount) updatedDocument.couponAmount = couponAmount
 
 
     if (fromDate && toDate) {
 
-        if (moment(new Date(fromDate)).isBefore(moment(new Date(isCouponExist.fromDate)))) {
+        if (moment(new Date(fromDate)).isBefore(moment(new Date(updatedDocument.fromDate)))) {
             return next(new Error('can not update (from date) before the day of (from date) has already exsit', { cause: 400 }))
         }
         if (moment(new Date(fromDate)).isAfter(moment(new Date()))) {
-            isCouponExist.couponStatus = 'Expired'
-        } else { isCouponExist.couponStatus = 'Valid' }
+            updatedDocument.couponStatus = 'Expired'
+        } else { updatedDocument.couponStatus = 'Valid' }
     }
 
     if (isFixedAmount === true) {
-        isCouponExist.isFixedAmount = true
-        isCouponExist.isPercentage = false
+        updatedDocument.isFixedAmount = true
+        updatedDocument.isPercentage = false
     } else {
-        isCouponExist.isFixedAmount = false
-        isCouponExist.isPercentage = true
+        updatedDocument.isFixedAmount = false
+        updatedDocument.isPercentage = true
     }
 
     //======================== assgin to users ==================
-    if (couponAssginedToUsers) {
+    if (userId) {
         let usersIds = []
-        let newUsers = []
-        let updateMaxUsage = []
+        let userExists = false
 
-        for (const user of couponAssginedToUsers) {
-
-            //=============== Add new Assigned user ===================
-
-            if (isCouponExist.couponAssginedToUsers.find((obj) => {
-                user.userId === obj.userId
-            })) {
-                updateMaxUsage.push(user)
-                console.log({ "update User": updateMaxUsage });
-                // continue
-            } else {
-                usersIds.push(user.userId)
-                newUsers.push(user)
-                console.log(
-                    { "Add user": newUsers }
-                );
+        for (const user of updatedDocument.couponAssginedToUsers) {
+            if (userId == user.userId) {
+                userExists = true
+                user.maxUsage = maxUsage   //===> USE lean() to convert BSON to object to allow editing
             }
-            // =============== Push to updateMaxUsage ===============
-
         }
 
-        // =========== Check Id have been entered ================
-        const usersCheck = await userModel.find({
-            _id: {
-                $in: usersIds,
-            },
-        })
+        // push new product
+        if (!userExists) {
+            // =========== Check Id have been entered ================
+            const usersCheck = await userModel.findById(userId)
 
-        if (usersIds.length !== usersCheck.length) {
-            return next(new Error('invalid userIds', { cause: 400 }))
-        }
-
-        if (newUsers.length) {
-            isCouponExist.couponAssginedToUsers = isCouponExist.couponAssginedToUsers.concat(newUsers)
-        }
-
-        if (updateMaxUsage.length) {
-            for (let obj = 0; obj < updateMaxUsage.length; obj++) {
-                const { userId, maxUsage } = updateMaxUsage[obj]
-                isCouponExist.couponAssginedToUsers = isCouponExist.couponAssginedToUsers.map((item) => {
-                    if (item.userId === userId) {
-                        item.maxUsage = maxUsage ? item.usageCount <= maxUsage : item.maxUsage;
-                    }
-                })
-
+            if (!usersCheck) {
+                return next(new Error('invalid user Id', { cause: 400 }))
             }
+
+            updatedDocument.couponAssginedToUsers.push({ userId, maxUsage })
         }
     }
 
 
 
-    isCouponExist.updatedBy = _id
+    updatedDocument.updatedBy = _id
 
 
-    await isCouponExist.save()
-    res.status(200).json({ message: 'Updated Done', isCouponExist })
+
+    await updatedDocument.save()
+    res.status(200).json({ message: 'Updated Done', updatedDocument })
 
 }
 
