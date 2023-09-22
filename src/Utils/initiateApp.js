@@ -15,7 +15,7 @@ export const initiateApp = (app, express) => {
     app.use(express.json())
     // cors policy
     app.use(cors())
-    app.get('/', (req, res) => res.send('Hello There in my E-commerce platform!'))
+    app.get('/', (req, res) => res.send('Hello There in my E-commerce platform! '))
 
     // Section Requests On graphQl APIs
 
