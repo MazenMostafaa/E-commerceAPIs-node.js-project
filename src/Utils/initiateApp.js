@@ -1,9 +1,11 @@
 import { globalResponse } from './asyncHandler.js'
 import { connectDB } from '../../DB/connection.js'
 import * as allRouters from '../Modules/index.routers.js'
+import * as allGraphqlSchemas from '../Modules/index.graphQlSchemas.js'
 import { changeCouponStatusCron } from './cronJobs.js'
 import { gracefulShutdown } from 'node-schedule'
 import cors from 'cors'
+import { createHandler } from 'graphql-http/lib/use/express'
 
 export const initiateApp = (app, express) => {
 
@@ -13,8 +15,12 @@ export const initiateApp = (app, express) => {
     app.use(express.json())
     // cors policy
     app.use(cors())
-    app.get('/', (req, res) => res.send('Hello There in my E-commerce platform! '))
+    app.get('/', (req, res) => res.send('Hello There in my E-commerce platform!'))
 
+    // Section Requests On graphQl APIs
+
+    app.use('/graphqlCategory', createHandler({ schema: allGraphqlSchemas.categoryGraphqlSchema }))
+    //  Section Requests On RESTful APIs
     app.use('/category', allRouters.categoryRouters)
     app.use('/subCategory', allRouters.subCategoryRouters)
     app.use('/brand', allRouters.brandRouters)
