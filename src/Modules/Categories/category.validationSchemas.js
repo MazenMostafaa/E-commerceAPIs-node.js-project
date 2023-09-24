@@ -41,3 +41,12 @@ export const deleteCategorySchema = {
         .required()
         .options({ presence: 'required' }),
 }
+
+export const getCategorySchemaQL = joi.object({
+    token: joi.string().required()
+}).required()
+
+export const deleteCategorySchemaQL = joi.object({
+    categoryId: generalFields.userid,
+    token: joi.string().required()
+}).required()

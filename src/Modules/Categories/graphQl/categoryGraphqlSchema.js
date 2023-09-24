@@ -8,7 +8,14 @@ export const categoryGraphqlSchema = new GraphQLSchema({
         name: "categoryQuerySchema",
         description: "This is main query schema in category module",
         fields: {
-            getAllCategory: categoryResolvers.getAllCategory
+            getAllCategory: categoryResolvers.getAllCategory,
+        }
+    }),
+    mutation: new GraphQLObjectType({
+        name: "categoryMutationSchema",
+        description: "This is main mutation schema in category module",
+        fields: {
+            deleteCategory: categoryResolvers.deleteCategory
         }
     })
 })
