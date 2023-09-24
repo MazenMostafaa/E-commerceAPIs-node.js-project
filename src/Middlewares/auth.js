@@ -79,3 +79,76 @@ export const isAuth = (roles) => {
         }
     }
 }
+
+export const isAuthQl = async (authorization, roles) => {
+    try {
+        if (!authorization) {
+            return new Error('Please login first', { cause: 400 })
+        }
+
+        if (!authorization.startsWith('ecommerce__')) {
+            return new Error('invalid token prefix', { cause: 400 })
+        }
+
+        const splitedToken = authorization.split(' ')[1]
+        try {
+            const decodedData = verifyToken({
+                token: splitedToken,
+                signature: process.env.SIGN_IN_TOKEN_SECRET,
+            })
+            const findUser = await userModel.findById(
+                decodedData._id,
+                'email userName role',
+            )
+            if (!findUser) {
+                return new Error('Please SignUp', { cause: 400 })
+            }
+
+            //============================== authorization ============
+
+            if (!roles.includes(findUser.role)) {
+                return new Error('Unauthorized user', { cause: 401 })
+            }
+
+            return {
+                code: 200,
+                findUser
+            }
+
+        } catch (error) {
+            // token  => search in db
+            if (error == 'TokenExpiredError: jwt expired') {
+                // refresh token
+                const user = await userModel.findOne({ token: splitedToken })
+                if (!user) {
+                    return new Error('Wrong token', { cause: 400 })
+                }
+                // generate new token
+                const userToken = generateToken({
+                    payload: {
+                        email: user.email,
+                        _id: user._id,
+                    },
+                    signature: process.env.SIGN_IN_TOKEN_SECRET,
+                    expiresIn: '1h',
+                })
+
+                if (!userToken) {
+                    return new Error('token generation fail, payload canot be empty', {
+                        cause: 400,
+                    })
+                }
+                await userModel.findOneAndUpdate(
+                    { token: splitedToken },
+                    { token: userToken },
+                )
+                return res.status(200).json({ message: 'Token refreshed', userToken })
+            }
+            return new Error('invalid token', { cause: 500 })
+        }
+    } catch (error) {
+        console.log(error)
+        new Error('catch error in auth', { cause: 500 })
+    }
+
+}
