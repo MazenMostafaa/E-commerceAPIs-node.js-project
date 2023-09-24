@@ -2,9 +2,12 @@ import joi from 'joi'
 import { Types } from 'mongoose'
 const reqMethods = ['body', 'query', 'params', 'headers', 'file', 'files']
 
+// ======= custome validation for object-Id ========
 const validationObjectId = (value, helper) => {
     return Types.ObjectId.isValid(value) ? true : helper.message('invalid id')
 }
+
+// ======= fields are used more than once ========
 export const generalFields = {
     userid: joi.string().custom(validationObjectId),
     userName: joi
@@ -65,6 +68,7 @@ export const generalFields = {
     })).messages({ "any.required": "file is required" })
 }
 
+// ======== validation for REST =========
 export const validationCoreFunction = (schema) => {
     return (req, res, next) => {
 
@@ -85,13 +89,19 @@ export const validationCoreFunction = (schema) => {
         }
 
         if (validationErrorArr.length) {
-            // return res
-            //     .status(400)
-            //     .json({ message: 'Validation Error', Errors: validationErrorArr })
             req.validationErrorArr = validationErrorArr
             return next(new Error('', { cause: 400 }))
         }
 
         next()
     }
+}
+
+// ======== validation for graphQL =========
+export const graphQlValidation = async (schema, args) => {
+    const { error } = schema.validate(args, { abortEarly: false })
+    if (error) {
+        return new Error(error)
+    }
+    return true
 }
