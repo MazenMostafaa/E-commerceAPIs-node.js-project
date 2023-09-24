@@ -10,6 +10,17 @@ export const imageType = new GraphQLObjectType({
     }
 })
 
+export const brandType = new GraphQLObjectType({
+    name: "brandType",
+    description: "returning of brands from DB",
+    fields: {
+        name: { type: GraphQLString },
+        slug: { type: GraphQLString },
+        createdBy: { type: GraphQLID },
+        logo: { type: imageType }
+    }
+})
+
 export const subCategoryType = new GraphQLObjectType({
     name: "subCategoryType",
     description: "returning of subCategories from DB",
@@ -17,7 +28,8 @@ export const subCategoryType = new GraphQLObjectType({
         name: { type: GraphQLString },
         slug: { type: GraphQLString },
         createdBy: { type: GraphQLID },
-        Image: { type: imageType }
+        Image: { type: imageType },
+        Brands: { type: new GraphQLList(brandType) }
     }
 })
 
@@ -32,4 +44,3 @@ export const categoryType = new GraphQLObjectType({
         subCategories: { type: new GraphQLList(subCategoryType) }
     }
 })
-
