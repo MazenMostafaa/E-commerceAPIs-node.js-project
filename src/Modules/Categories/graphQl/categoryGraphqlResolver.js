@@ -7,11 +7,21 @@ import { categoryType } from './categoryGraphqlTypies.js'
 import { graphQlValidation } from '../../../Middlewares/validation.js'
 import * as validators from '../category.validationSchemas.js'
 import cloudinary from '../../../Utils/cloudinaryConfig.js'
+import { isAuthQl } from '../../../Middlewares/auth.js'
+import { categoryAPIsRoles } from './categoryGraphql.endPoints.js'
 
 
 export const getAllCategory = {
     type: new GraphQLList(categoryType),
-    resolve: async () => {
+    args: {
+        token: { type: new GraphQLNonNull(GraphQLString) }
+    },
+    resolve: async (__, args) => {
+        // ==================== auhtentication + authorization  ===============
+        const isAuthUser = await isAuthQl(args.token, categoryAPIsRoles.GET_ALL_CATEGORY)
+        if (!isAuthUser.code) {
+            return isAuthUser
+        }
         const categories = await categoryModel.find().populate([{
             path: 'subCategories',
             populate: [{
@@ -25,15 +35,21 @@ export const getAllCategory = {
 export const deleteCategory = {
     type: new GraphQLObjectType({
         name: "deleteCategoryType",
-        description: "returning message of delete status",
+        description: "response",
         fields: {
             message: { type: GraphQLString },
         }
     }),
     args: {
-        categoryId: { type: new GraphQLNonNull(GraphQLID) }
+        categoryId: { type: new GraphQLNonNull(GraphQLID) },
+        token: { type: new GraphQLNonNull(GraphQLString) }
     },
     resolve: async (__, args) => {
+        // ==================== auhtentication + authorization  ===============
+        const isAuthUser = await isAuthQl(args.token, categoryAPIsRoles.DELETE_CATEGORY)
+        if (!isAuthUser.code) {
+            return isAuthUser
+        }
         // =========== validation layer ===========
         const isValid = await graphQlValidation(validators.deleteCategorySchemaQL, args)
         if (isValid !== true) {
@@ -42,7 +58,7 @@ export const deleteCategory = {
         // ================= logic of deleting ======================
         const categoryExists = await categoryModel.findOneAndDelete({
             _id: args.categoryId,
-            // createdBy: _id,
+            createdBy: isAuthUser.findUser._id,
         })
         if (!categoryExists) {
             return {
