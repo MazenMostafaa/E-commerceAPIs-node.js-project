@@ -3,117 +3,112 @@ import { subCategoryModel } from '../../../../DB/Models/subCategory.model.js'
 import { brandModel } from '../../../../DB/Models/brand.model.js'
 import { productModel } from '../../../../DB/Models/product.model.js'
 import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql"
-import { categoryType } from './categoryGraphqlTypies.js'
+import { subCategoryType } from './subCategoryGraphqlTypies.js'
 import { graphQlValidation } from '../../../Middlewares/validation.js'
-import * as validators from '../category.validationSchemas.js'
+import * as validators from '../subCategory.validationSchemas.js'
 import cloudinary from '../../../Utils/cloudinaryConfig.js'
 import { isAuthQl } from '../../../Middlewares/auth.js'
-import { categoryAPIsRoles } from './categoryGraphql.endPoints.js'
+import { subCategoryAPIsRoles } from './subCategoryGraphql.endPoints.js'
 import { paginationFunction } from '../../../Utils/pagination.js'
 
-
-export const getAllCategory = {
-    type: new GraphQLList(categoryType),
+export const getAllSubCategory = {
+    type: new GraphQLList(subCategoryType),
     args: {
         token: { type: new GraphQLNonNull(GraphQLString) },
         page: { type: GraphQLString } || undefined,
         size: { type: GraphQLString } || undefined
     },
     resolve: async (__, args) => {
-        const { page, size } = args
         // ==================== auhtentication + authorization  ===============
-        const isAuthUser = await isAuthQl(args.token, categoryAPIsRoles.GET_ALL_CATEGORY)
+        const isAuthUser = await isAuthQl(args.token, subCategoryAPIsRoles.GET_ALL_CATEGORY)
         if (!isAuthUser.code) {
             return isAuthUser
         }
         // =========== validation layer ===========
-        const isValid = await graphQlValidation(validators.getCategorySchemaQL, args)
+        const isValid = await graphQlValidation(validators.getSubCategorySchemaQL, args)
         if (isValid !== true) {
             return isValid
         }
+        const { page, size } = args
         const { limit, skip } = paginationFunction({ page, size })
-        const categories = await categoryModel.find()
+
+        const subCategories = await subCategoryModel.find()
             .limit(limit)
             .skip(skip)
             .populate([{
-                path: 'subCategories',
-                populate: [{
-                    path: 'Brands'
-                }]
+                path: 'Brands'
+
             }])
-        return categories
+        return subCategories
     }
 }
 
-export const deleteCategory = {
+export const deleteSubCategory = {
     type: new GraphQLObjectType({
-        name: "deleteCategoryType",
+        name: "deleteSubCategoryType",
         description: "response",
         fields: {
             message: { type: GraphQLString },
         }
     }),
     args: {
-        categoryId: { type: new GraphQLNonNull(GraphQLID) },
+        subCategoryId: { type: new GraphQLNonNull(GraphQLID) },
         token: { type: new GraphQLNonNull(GraphQLString) }
     },
     resolve: async (__, args) => {
+        const { subCategoryId } = args
         // ==================== auhtentication + authorization  ===============
-        const isAuthUser = await isAuthQl(args.token, categoryAPIsRoles.DELETE_CATEGORY)
+        const isAuthUser = await isAuthQl(args.token, subCategoryAPIsRoles.DELETE_CATEGORY)
         if (!isAuthUser.code) {
             return isAuthUser
         }
         // =========== validation layer ===========
-        const isValid = await graphQlValidation(validators.deleteCategorySchemaQL, args)
+        const isValid = await graphQlValidation(validators.deleteSubCategorySchemaQL, args)
         if (isValid !== true) {
             return isValid
         }
         // ================= logic of deleting ======================
-        const categoryExists = await categoryModel.findOneAndDelete({
-            _id: args.categoryId,
-            createdBy: isAuthUser.findUser._id,
+        const subCategoryExists = await subCategoryModel.findOneAndDelete({
+            _id: subCategoryId,
+            createdBy: isAuthUser.findUser._id
         })
+        if (!subCategoryExists) {
+            return next(new Error('invalid subCategory Id or User Id', { cause: 400 }))
+        }
+
+        const categoryExists = await categoryModel.findById(subCategoryExists.categoryId)
         if (!categoryExists) {
             return {
-                message: 'invalid categoryId Or user Id'
+                message: 'invalid Category related to subCategory'
             }
         }
 
         //=========== Delete from cloudinary ==============
         await cloudinary.api.delete_resources_by_prefix(
-            `${process.env.PROJECT_FOLDER}/Categories/${categoryExists.customId}`,
+            `${process.env.PROJECT_FOLDER}/Categories/${categoryExists.customId}/subCategories/${subCategoryExists.customId}`,
         )
 
         await cloudinary.api.delete_folder(
-            `${process.env.PROJECT_FOLDER}/Categories/${categoryExists.customId}`,
+            `${process.env.PROJECT_FOLDER}/Categories/${categoryExists.customId}/subCategories/${subCategoryExists.customId}`,
         )
 
         //=========== Delete from DB ==============
-        const deleteRelatedSubCategories = await subCategoryModel.deleteMany({
-            categoryId: args.categoryId,
-        })
-
-        if (!deleteRelatedSubCategories.deletedCount) {
-            return {
-                message: 'delete Category has been Done and there is not subCategory and other leaves'
-            }
-        }
         const deleteRelatedBrands = await brandModel.deleteMany({
-            categoryId: args.categoryId,
+            subCategoryId,
         })
         if (!deleteRelatedBrands.deletedCount) {
             return {
-                message: 'delete Category has been Done and there is not brand and other leaves'
+                message: 'delete subCategory has been Done and there is not brand and other leaves'
             }
         }
 
         const deleteRelatedProducts = await productModel.deleteMany({
-            categoryId: args.categoryId,
+            subCategoryId,
         })
 
         if (!deleteRelatedProducts.deletedCount) {
             return {
-                message: 'delete Category has been Done and there are not products '
+                message: 'delete SubCategory has been Done and there are not products '
             }
         }
         return {

@@ -20,6 +20,7 @@ export const initiateApp = (app, express) => {
     // Section Requests On graphQl APIs
 
     app.use('/graphqlCategory', createHandler({ schema: allGraphqlSchemas.categoryGraphqlSchema }))
+    app.use('/graphqlSubCategory', createHandler({ schema: allGraphqlSchemas.subCategoryGraphqlSchema }))
     //  Section Requests On RESTful APIs
     app.use('/category', allRouters.categoryRouters)
     app.use('/subCategory', allRouters.subCategoryRouters)

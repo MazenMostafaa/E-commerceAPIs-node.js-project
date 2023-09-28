@@ -15,7 +15,9 @@ const router = Router()
 router.use('/:categoryId', subCategoryRouter)
 
 
-router.get('/', isAuth(categoryApisRoles.GET_ALL_CATEGORY), asyncHandler(cc.getAllCategories))
+router.get('/', isAuth(categoryApisRoles.GET_ALL_CATEGORY),
+    validationCoreFunction(validators.getAllCategories)
+    , asyncHandler(cc.getAllCategories))
 
 router.post(
     '/create',

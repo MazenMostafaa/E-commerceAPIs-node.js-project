@@ -5,6 +5,7 @@ import { brandModel } from '../../../DB/Models/brand.model.js'
 import { productModel } from '../../../DB/Models/product.model.js'
 import { customAlphabet } from 'nanoid'
 import cloudinary from '../../Utils/cloudinaryConfig.js'
+import { paginationFunction } from '../../Utils/pagination.js'
 const nanoid = customAlphabet('123456_=!ascbhdtel', 5)
 
 //======================================= create subCategory ==============================
@@ -70,16 +71,22 @@ export const createSubCategory = async (req, res, next) => {
 
 // ========================================== get all subCategories with category Data ==========================================
 export const getAllSubCategories = async (req, res, next) => {
-    const subCategories = await subCategoryModel.find().populate([
-        {
-            path: 'categoryId',
-            select: 'slug',
-        },
-        {
-            path: 'Brands',
-            select: 'slug'
-        }
-    ])
+    const { page, size } = req.query
+    const { limit, skip } = paginationFunction({ page, size })
+
+    const subCategories = await subCategoryModel.find()
+        .limit(limit)
+        .skip(skip)
+        .populate([
+            {
+                path: 'categoryId',
+                select: 'slug',
+            },
+            {
+                path: 'Brands',
+                select: 'slug'
+            }
+        ])
     res.status(200).json({ message: 'Done', subCategories })
 }
 

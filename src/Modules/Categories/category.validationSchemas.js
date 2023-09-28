@@ -32,6 +32,13 @@ export const updateCategorySchema = {
     }).required().options({ presence: 'required' })
 
 }
+export const getAllCategories = {
+    query: joi
+        .object({
+            page: joi.number().integer().positive().min(1).max(10).optional(),
+            size: joi.number().integer().positive().min(2).max(10).optional()
+        }).required()
+}
 
 export const deleteCategorySchema = {
     query: joi
@@ -42,8 +49,11 @@ export const deleteCategorySchema = {
         .options({ presence: 'required' }),
 }
 
+// =======================================graphQl Valid Schemas=====================
 export const getCategorySchemaQL = joi.object({
-    token: joi.string().required()
+    token: joi.string().required(),
+    page: joi.number().integer().positive().min(1).max(10).optional(),
+    size: joi.number().integer().positive().min(2).max(10).optional()
 }).required()
 
 export const deleteCategorySchemaQL = joi.object({
