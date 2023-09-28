@@ -5,6 +5,7 @@ import { categoryModel } from '../../../DB/Models/category.model.js'
 import { subCategoryModel } from '../../../DB/Models/subCategory.model.js'
 import { brandModel } from '../../../DB/Models/brand.model.js'
 import { productModel } from '../../../DB/Models/product.model.js'
+import { paginationFunction } from '../../Utils/pagination.js'
 import { customAlphabet } from 'nanoid'
 const nanoid = customAlphabet('123456_=!ascbhdtel', 5)
 
@@ -127,16 +128,22 @@ export const updateCategory = async (req, res, next) => {
 
 //========================================== get all categories with subCategories ==========================================
 export const getAllCategories = async (req, res, next) => {
-    const Categories = await categoryModel.find().populate([
-        {
-            path: 'subCategories',
-            select: 'name',
-            populate: [{
-                path: 'Brands',
+    const { page, size } = req.query
+    const { limit, skip } = paginationFunction({ page, size })
+
+    const Categories = await categoryModel.find()
+        .limit(limit)
+        .skip(skip)
+        .populate([
+            {
+                path: 'subCategories',
                 select: 'name',
-            }]
-        }
-    ])
+                populate: [{
+                    path: 'Brands',
+                    select: 'name',
+                }]
+            }
+        ])
 
     res.status(200).json({ message: 'Done', Categories })
 }

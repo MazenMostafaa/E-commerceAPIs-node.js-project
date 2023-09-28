@@ -31,6 +31,13 @@ export const updateSubCategorySchema = {
         subCategoryId: generalFields.userid
     }).required().options({ presence: 'required' })
 }
+export const getAllSubCategories = {
+    query: joi
+        .object({
+            page: joi.number().integer().positive().min(1).max(10).optional(),
+            size: joi.number().integer().positive().min(2).max(10).optional()
+        }).required()
+}
 export const deleteCategorySchema = {
     query: joi
         .object({
@@ -39,3 +46,15 @@ export const deleteCategorySchema = {
         .required()
         .options({ presence: 'required' }),
 }
+
+// ===========================graphQL valid Schemas===============================
+export const getSubCategorySchemaQL = joi.object({
+    token: joi.string().required(),
+    page: joi.number().integer().positive().min(1).max(10).optional(),
+    size: joi.number().integer().positive().min(2).max(10).optional()
+}).required()
+
+export const deleteSubCategorySchemaQL = joi.object({
+    subCategoryId: generalFields.userid,
+    token: joi.string().required()
+}).required()

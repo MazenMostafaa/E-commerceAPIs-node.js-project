@@ -12,7 +12,9 @@ import { subCategoryApisRoles } from './subCategory.endPoints.js'
 const router = Router({ mergeParams: true })
 
 
-router.get('/', isAuth(subCategoryApisRoles.GET_ALL_SUBCATEGORY), asyncHandler(sc.getAllSubCategories))
+router.get('/', isAuth(subCategoryApisRoles.GET_ALL_SUBCATEGORY),
+    validationCoreFunction(validators.getAllSubCategories)
+    , asyncHandler(sc.getAllSubCategories))
 
 router.post(
     '/create',
