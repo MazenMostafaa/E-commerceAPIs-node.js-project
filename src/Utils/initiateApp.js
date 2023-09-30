@@ -21,6 +21,7 @@ export const initiateApp = (app, express) => {
 
     app.use('/graphqlCategory', createHandler({ schema: allGraphqlSchemas.categoryGraphqlSchema }))
     app.use('/graphqlSubCategory', createHandler({ schema: allGraphqlSchemas.subCategoryGraphqlSchema }))
+    app.use('/graphqlBrand', createHandler({ schema: allGraphqlSchemas.brandGraphqlSchema }))
     //  Section Requests On RESTful APIs
     app.use('/category', allRouters.categoryRouters)
     app.use('/subCategory', allRouters.subCategoryRouters)

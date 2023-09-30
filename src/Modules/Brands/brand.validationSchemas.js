@@ -40,6 +40,13 @@ export const updateBrandSchema = {
         brandId: generalFields.userid
     }).required().options({ presence: 'required' })
 }
+export const getAllBrands = {
+    query: joi
+        .object({
+            page: joi.number().integer().positive().min(1).max(10).optional(),
+            size: joi.number().integer().positive().min(2).max(10).optional()
+        }).required()
+}
 
 export const deleteBrandSchema = {
     query: joi
@@ -49,3 +56,15 @@ export const deleteBrandSchema = {
         .required()
         .options({ presence: 'required' }),
 }
+
+// =========================grapgQl Valid Schemas===================
+export const getBrandSchemaQL = joi.object({
+    token: joi.string().required(),
+    page: joi.number().integer().positive().min(1).max(10).optional(),
+    size: joi.number().integer().positive().min(2).max(10).optional()
+}).required()
+
+export const deleteBrandSchemaQL = joi.object({
+    brandId: generalFields.userid,
+    token: joi.string().required()
+}).required()
