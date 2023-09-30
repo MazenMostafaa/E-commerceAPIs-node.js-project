@@ -13,7 +13,9 @@ const router = Router()
 
 
 
-router.get('/', isAuth(brandApisRoles.GET_ALL_BRAND), asyncHandler(bc.getAllBrands))
+router.get('/', isAuth(brandApisRoles.GET_ALL_BRAND),
+    validationCoreFunction(validators.getAllBrands)
+    , asyncHandler(bc.getAllBrands))
 
 router.post(
     '/create',

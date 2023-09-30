@@ -5,6 +5,7 @@ import { productModel } from '../../../DB/Models/product.model.js'
 import cloudinary from '../../Utils/cloudinaryConfig.js'
 import { customAlphabet } from 'nanoid'
 import { brandModel } from '../../../DB/Models/brand.model.js'
+import { paginationFunction } from '../../Utils/pagination.js'
 const nanoid = customAlphabet('123456_=!ascbhdtel', 5)
 
 //=================================== Add Brand ========================
@@ -190,19 +191,26 @@ export const deleteBrand = async (req, res, next) => {
 
 // ========================================== get all brands ==========================================
 export const getAllBrands = async (req, res, next) => {
-    const brands = await brandModel.find().populate([
-        {
-            path: 'categoryId',
-            select: 'name',
-        },
-        {
-            path: 'subCategoryId',
-            select: 'name'
-        },
-        {
-            path: 'products',
-            select: "title"
-        }
-    ])
+    const { page, size } = req.query
+
+    const { limit, skip } = paginationFunction({ page, size })
+
+    const brands = await brandModel.find()
+        .limit(limit)
+        .skip(skip)
+        .populate([
+            {
+                path: 'categoryId',
+                select: 'name',
+            },
+            {
+                path: 'subCategoryId',
+                select: 'name'
+            },
+            {
+                path: 'products',
+                select: "title"
+            }
+        ])
     res.status(200).json({ message: 'Done', brands })
 }
