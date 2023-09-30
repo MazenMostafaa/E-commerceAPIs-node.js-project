@@ -20,7 +20,7 @@ export const getAllSubCategory = {
     },
     resolve: async (__, args) => {
         // ==================== auhtentication + authorization  ===============
-        const isAuthUser = await isAuthQl(args.token, subCategoryAPIsRoles.GET_ALL_CATEGORY)
+        const isAuthUser = await isAuthQl(args.token, subCategoryAPIsRoles.GET_ALL_SUB_CATEGORY)
         if (!isAuthUser.code) {
             return isAuthUser
         }
@@ -58,7 +58,7 @@ export const deleteSubCategory = {
     resolve: async (__, args) => {
         const { subCategoryId } = args
         // ==================== auhtentication + authorization  ===============
-        const isAuthUser = await isAuthQl(args.token, subCategoryAPIsRoles.DELETE_CATEGORY)
+        const isAuthUser = await isAuthQl(args.token, subCategoryAPIsRoles.DELETE_SUB_CATEGORY)
         if (!isAuthUser.code) {
             return isAuthUser
         }
