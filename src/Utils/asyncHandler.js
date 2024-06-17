@@ -32,6 +32,8 @@ export const globalResponse = (err, req, res, next) => {
                 .json({ message: req.validationErrorArr })
         }
 
-        return res.status(err['cause'] || 500).json({ message: err.message })
+        return res
+            .status(err['cause'] || 500)
+            .json({ message: err.message })
     }
 }

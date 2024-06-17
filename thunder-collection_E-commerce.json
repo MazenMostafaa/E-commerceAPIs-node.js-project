@@ -1,0 +1,1109 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "E-commerce",
+    "collectionId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+    "dateExported": "2024-06-17T21:22:34.647Z",
+    "version": "1.2",
+    "folders": [
+        {
+            "_id": "79cac53f-79d0-4f1c-b2bb-b7f244889c45",
+            "name": "Category APIs",
+            "containerId": "",
+            "created": "2023-08-06T20:36:35.971Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "b9e6f730-18b0-456b-b809-0e7ed14df94a",
+            "name": "SubCategory APIs",
+            "containerId": "",
+            "created": "2023-08-06T23:05:18.251Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "8e718cdf-b27d-4924-9447-3753e7a4d5b7",
+            "name": "Brand APIs",
+            "containerId": "",
+            "created": "2023-08-12T21:05:58.708Z",
+            "sortNum": 30000
+        },
+        {
+            "_id": "eb868c73-4c7c-4e8c-a8f1-0ba492c25b2b",
+            "name": "Product APIs",
+            "containerId": "",
+            "created": "2023-08-13T00:18:09.034Z",
+            "sortNum": 40000
+        },
+        {
+            "_id": "f6f6a553-a9ed-460d-9a97-c57876c72c9a",
+            "name": "Coupons APIs",
+            "containerId": "",
+            "created": "2023-08-20T21:35:10.814Z",
+            "sortNum": 50000
+        },
+        {
+            "_id": "088ec305-a916-4554-93f1-d00e8b2c983f",
+            "name": "Auth User APIs",
+            "containerId": "",
+            "created": "2023-08-24T22:00:57.688Z",
+            "sortNum": 60000
+        },
+        {
+            "_id": "3e3f95f8-3e56-4891-a3ae-e84e8fcade2e",
+            "name": "Cart APIs",
+            "containerId": "",
+            "created": "2023-08-31T00:27:04.457Z",
+            "sortNum": 70000
+        },
+        {
+            "_id": "b2ce7d1a-bcf3-4b56-91c7-ecd24504ced1",
+            "name": "Order APIs",
+            "containerId": "",
+            "created": "2023-08-31T23:42:53.760Z",
+            "sortNum": 80000
+        },
+        {
+            "_id": "e4c06056-e326-4d06-b29e-e08f5a5aae37",
+            "name": "Review APIs",
+            "containerId": "",
+            "created": "2023-09-13T21:16:46.088Z",
+            "sortNum": 90000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "d147b571-7698-4cd7-b94d-763830579588",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "79cac53f-79d0-4f1c-b2bb-b7f244889c45",
+            "name": "Create Category",
+            "url": "{{url}}/category/create",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-08-06T20:36:47.506Z",
+            "modified": "2023-09-28T22:30:49.940Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "category_1"
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "categoryImage",
+                        "value": "c:\\Users\\mazen\\OneDrive\\Desktop\\photos\\120261.jpg"
+                    }
+                ]
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYUBnbWFpbC5jb20iLCJfaWQiOiI2NGY2MTUwZDA1ZGZkMTE4M2RkOTRmYWYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2OTU5NDAyMjYsImV4cCI6MTY5NTk0MzgyNn0.h6xVOz3LmCgda7DJ4qmt8eh4OgivxizBN-FI0YPhFSM",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "5937e24c-ab00-42f4-89ad-b31129d240a2",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "79cac53f-79d0-4f1c-b2bb-b7f244889c45",
+            "name": "Update",
+            "url": "http://localhost:3000/category/update?categoryId=64ec01ceb78f1506e620ee98",
+            "method": "PUT",
+            "sortNum": 20000,
+            "created": "2023-08-06T22:04:33.789Z",
+            "modified": "2023-08-28T02:10:11.560Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "categoryId",
+                    "value": "64ec01ceb78f1506e620ee98",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "test Updated"
+                    }
+                ]
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGU5ZmU5M2RlOGQyODkzYjdiNDYwZTUiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5MzE4ODQ2NiwiZXhwIjoxNjkzMTkyMDY2fQ.1AlGCLE4Pcy33pmv1ASbfYUvZ66cl4nVQOBmMaK1hEM",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "9948d5b4-9bac-45a8-84b2-a6f78a43352c",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "b9e6f730-18b0-456b-b809-0e7ed14df94a",
+            "name": "Create subCate",
+            "url": "http://localhost:3000/subCategory/create?categoryId=6515fe991b0871c61537e0a5",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-08-06T23:05:27.913Z",
+            "modified": "2023-09-28T22:31:12.057Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "categoryId",
+                    "value": "6515fe991b0871c61537e0a5",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "SubCategory_1"
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "subCategoryImage",
+                        "value": "c:\\Users\\mazen\\OneDrive\\Desktop\\photos\\images.jpeg"
+                    }
+                ]
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYUBnbWFpbC5jb20iLCJfaWQiOiI2NGY2MTUwZDA1ZGZkMTE4M2RkOTRmYWYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2OTU5NDAyMjYsImV4cCI6MTY5NTk0MzgyNn0.h6xVOz3LmCgda7DJ4qmt8eh4OgivxizBN-FI0YPhFSM",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "06d7ed88-190e-423f-a829-c87d02ab9c40",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "b9e6f730-18b0-456b-b809-0e7ed14df94a",
+            "name": "get all subCategory",
+            "url": "http://localhost:3000/subCategory/",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-08-07T17:50:56.515Z",
+            "modified": "2023-08-07T17:51:37.927Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "18adce00-33c2-41e0-8af7-73b34829cbdd",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "79cac53f-79d0-4f1c-b2bb-b7f244889c45",
+            "name": "get all gategory",
+            "url": "http://localhost:3000/category/",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2023-08-07T18:02:48.488Z",
+            "modified": "2023-08-07T18:02:57.784Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "e212abe2-ace0-496e-9c31-3cd441f1f290",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "8e718cdf-b27d-4924-9447-3753e7a4d5b7",
+            "name": "create brand",
+            "url": "{{url}}/brand/create?categoryId=6515fe991b0871c61537e0a5&subCategoryId=6515ff551b0871c61537e0b4",
+            "method": "POST",
+            "sortNum": 70000,
+            "created": "2023-08-12T21:06:13.299Z",
+            "modified": "2023-09-28T22:34:35.460Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "categoryId",
+                    "value": "6515fe991b0871c61537e0a5",
+                    "isPath": false
+                },
+                {
+                    "name": "subCategoryId",
+                    "value": "6515ff551b0871c61537e0b4",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "brand_1"
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "logoImage",
+                        "value": "c:\\Users\\mazen\\OneDrive\\Desktop\\photos\\Persil-Logo-2020-present.jpg"
+                    }
+                ]
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYUBnbWFpbC5jb20iLCJfaWQiOiI2NGY2MTUwZDA1ZGZkMTE4M2RkOTRmYWYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2OTU5NDAyMjYsImV4cCI6MTY5NTk0MzgyNn0.h6xVOz3LmCgda7DJ4qmt8eh4OgivxizBN-FI0YPhFSM",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "9def90b2-6e47-4a92-b2f4-8272a0644479",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "79cac53f-79d0-4f1c-b2bb-b7f244889c45",
+            "name": "delete Categ",
+            "url": "{{url}}/category/delete?categoryId=64ec01ceb78f1506e620ee98",
+            "method": "DELETE",
+            "sortNum": 80000,
+            "created": "2023-08-12T21:44:19.568Z",
+            "modified": "2023-08-28T02:10:41.008Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "categoryId",
+                    "value": "64ec01ceb78f1506e620ee98",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGU5ZmU5M2RlOGQyODkzYjdiNDYwZTUiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5MzE4ODQ2NiwiZXhwIjoxNjkzMTkyMDY2fQ.1AlGCLE4Pcy33pmv1ASbfYUvZ66cl4nVQOBmMaK1hEM",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "d12a57b8-8b61-4d2b-b99c-c35efe871217",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "eb868c73-4c7c-4e8c-a8f1-0ba492c25b2b",
+            "name": "Add product",
+            "url": "{{url}}/product/add?categoryId=6515fe991b0871c61537e0a5&subCategoryId=6515ff551b0871c61537e0b4&brandId=6515ff7b1b0871c61537e0b9",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2023-08-13T00:18:18.008Z",
+            "modified": "2023-09-28T22:36:05.805Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "categoryId",
+                    "value": "6515fe991b0871c61537e0a5",
+                    "isPath": false
+                },
+                {
+                    "name": "subCategoryId",
+                    "value": "6515ff551b0871c61537e0b4",
+                    "isPath": false
+                },
+                {
+                    "name": "brandId",
+                    "value": "6515ff7b1b0871c61537e0b9",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "title",
+                        "value": "product test1"
+                    },
+                    {
+                        "name": "desc",
+                        "value": "good and niceewwww"
+                    },
+                    {
+                        "name": "price",
+                        "value": "500"
+                    },
+                    {
+                        "name": "colors",
+                        "value": "green"
+                    },
+                    {
+                        "name": "colors",
+                        "value": "black"
+                    },
+                    {
+                        "name": "sizes",
+                        "value": "256G"
+                    },
+                    {
+                        "name": "sizes",
+                        "value": "128G"
+                    },
+                    {
+                        "name": "stock",
+                        "value": "12"
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "productImage",
+                        "value": "c:\\Users\\mazen\\OneDrive\\Desktop\\photos\\IMG_20210331_162700_231.jpg"
+                    },
+                    {
+                        "name": "productImage",
+                        "value": "c:\\Users\\mazen\\OneDrive\\Desktop\\photos\\120159.jpg"
+                    }
+                ]
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYUBnbWFpbC5jb20iLCJfaWQiOiI2NGY2MTUwZDA1ZGZkMTE4M2RkOTRmYWYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2OTU5NDAyMjYsImV4cCI6MTY5NTk0MzgyNn0.h6xVOz3LmCgda7DJ4qmt8eh4OgivxizBN-FI0YPhFSM",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "dcfdfac5-7035-4fcc-b660-4bc3fe44aa61",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "b9e6f730-18b0-456b-b809-0e7ed14df94a",
+            "name": "Update Subcateg",
+            "url": "{{url}}/subCategory/update?subCategoryId=64ec0a85b56d83fcb275ab7f",
+            "method": "PUT",
+            "sortNum": 100000,
+            "created": "2023-08-13T15:33:06.223Z",
+            "modified": "2023-08-28T02:47:20.651Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "subCategoryId",
+                    "value": "64ec0a85b56d83fcb275ab7f",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "test Updated",
+                        "isDisabled": true
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "subCategoryImage",
+                        "value": "c:\\Users\\mazen\\OneDrive\\Desktop\\photos\\FB_IMG_1600372305736.jpg"
+                    }
+                ]
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGU5ZmU5M2RlOGQyODkzYjdiNDYwZTUiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5MzE4ODQ2NiwiZXhwIjoxNjkzMTkyMDY2fQ.1AlGCLE4Pcy33pmv1ASbfYUvZ66cl4nVQOBmMaK1hEM",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "1e275093-acf2-48bb-9514-dcf60843ff24",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "b9e6f730-18b0-456b-b809-0e7ed14df94a",
+            "name": "delete Subcateg",
+            "url": "{{url}}/subCategory/delete?subCategoryId=64ec0a85b56d83fcb275ab7f",
+            "method": "DELETE",
+            "sortNum": 110000,
+            "created": "2023-08-13T15:57:06.576Z",
+            "modified": "2023-08-28T02:49:24.751Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "subCategoryId",
+                    "value": "64ec0a85b56d83fcb275ab7f",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGU5ZmU5M2RlOGQyODkzYjdiNDYwZTUiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5MzE4ODQ2NiwiZXhwIjoxNjkzMTkyMDY2fQ.1AlGCLE4Pcy33pmv1ASbfYUvZ66cl4nVQOBmMaK1hEM",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "4ce8ca92-ca24-4def-932e-a942074e16e6",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "8e718cdf-b27d-4924-9447-3753e7a4d5b7",
+            "name": "Update Brand",
+            "url": "{{url}}/brand/update?brandId=64ec0d340466a8205c0a4f10",
+            "method": "PUT",
+            "sortNum": 120000,
+            "created": "2023-08-16T17:36:53.777Z",
+            "modified": "2023-08-28T02:58:43.063Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "brandId",
+                    "value": "64ec0d340466a8205c0a4f10",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "test Updated"
+                    }
+                ]
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGU5ZmU5M2RlOGQyODkzYjdiNDYwZTUiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5MzE4ODQ2NiwiZXhwIjoxNjkzMTkyMDY2fQ.1AlGCLE4Pcy33pmv1ASbfYUvZ66cl4nVQOBmMaK1hEM",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "af26c84a-0386-4a85-8d86-fc3b4933ad2d",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "8e718cdf-b27d-4924-9447-3753e7a4d5b7",
+            "name": "Delete Brand",
+            "url": "{{url}}/brand/delete?brandId=64ec0d340466a8205c0a4f10",
+            "method": "DELETE",
+            "sortNum": 130000,
+            "created": "2023-08-16T20:47:46.810Z",
+            "modified": "2023-08-28T02:59:14.699Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "brandId",
+                    "value": "64ec0d340466a8205c0a4f10",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGU5ZmU5M2RlOGQyODkzYjdiNDYwZTUiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5MzE4ODQ2NiwiZXhwIjoxNjkzMTkyMDY2fQ.1AlGCLE4Pcy33pmv1ASbfYUvZ66cl4nVQOBmMaK1hEM",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "46a23f35-8b81-425d-9a73-9f01e75c47ab",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "8e718cdf-b27d-4924-9447-3753e7a4d5b7",
+            "name": "Get all brands",
+            "url": "{{url}}/brand/",
+            "method": "GET",
+            "sortNum": 140000,
+            "created": "2023-08-16T21:13:12.114Z",
+            "modified": "2023-08-16T21:13:38.182Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "037939cb-de68-40d2-9ea1-912c40bf6f2c",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "eb868c73-4c7c-4e8c-a8f1-0ba492c25b2b",
+            "name": "Update Product",
+            "url": "{{url}}/product/update?productId=64f66e52139a1a7401d67cc5",
+            "method": "PUT",
+            "sortNum": 150000,
+            "created": "2023-08-17T16:10:20.105Z",
+            "modified": "2023-09-04T23:56:17.766Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "productId",
+                    "value": "64f66e52139a1a7401d67cc5",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "title",
+                        "value": "samsung xs12",
+                        "isDisabled": true
+                    },
+                    {
+                        "name": "stock",
+                        "value": "5",
+                        "isDisabled": true
+                    },
+                    {
+                        "name": "price",
+                        "value": "40000",
+                        "isDisabled": true
+                    },
+                    {
+                        "name": "appliedDiscount",
+                        "value": "25",
+                        "isDisabled": true
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "productImage",
+                        "value": "c:\\Users\\mazen\\OneDrive\\Desktop\\photos\\400187000274_216841.jpg"
+                    },
+                    {
+                        "name": "productImage",
+                        "value": "c:\\Users\\mazen\\OneDrive\\Desktop\\photos\\name.jpg",
+                        "isDisabled": true
+                    }
+                ]
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGVmYmViMjkwMzIzZWExMWUyMjllMDQiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5Mzg3MDQ0MywiZXhwIjoxNjkzODc0MDQzfQ.HrsiFJ3FSbi0S_D36gOoz0Qny6Dw-d2Ha1U6MAkcvb4",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "06059076-f775-4c03-a4fe-e8015af10ca8",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "eb868c73-4c7c-4e8c-a8f1-0ba492c25b2b",
+            "name": "Delete Product",
+            "url": "{{url}}/product/delete?productId=64ef5b87a4c96d2cb49cd291",
+            "method": "DELETE",
+            "sortNum": 160000,
+            "created": "2023-08-17T23:12:57.750Z",
+            "modified": "2023-08-30T15:12:48.373Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "productId",
+                    "value": "64ef5b87a4c96d2cb49cd291",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGU5ZmU5M2RlOGQyODkzYjdiNDYwZTUiLCJyb2xlIjoiVXNlciIsImVtYWlsIjoibWF6ZW5tb3N0YWZhMDQ3QGdtYWlsLmNvbSIsImlhdCI6MTY5MzQwODAzNCwiZXhwIjoxNjkzNTgwODM0fQ.k3i6B7ragXjCPfx85oqP-Gc_MeghVD3VeZz09AxoAlU",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "89963f86-716a-49ea-87e1-7be6bd013e8f",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "eb868c73-4c7c-4e8c-a8f1-0ba492c25b2b",
+            "name": "Get Specific Product",
+            "url": "{{url}}/product/title?searchKey=samsung",
+            "method": "GET",
+            "sortNum": 170000,
+            "created": "2023-08-18T19:15:50.453Z",
+            "modified": "2023-08-18T19:17:47.672Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "searchKey",
+                    "value": "samsung",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "646ea76a-7daf-4ba1-9ee7-9d6f7ac961c6",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "eb868c73-4c7c-4e8c-a8f1-0ba492c25b2b",
+            "name": "get All Product",
+            "url": "{{url}}/product/?page=1&size=5",
+            "method": "GET",
+            "sortNum": 180000,
+            "created": "2023-08-20T14:52:13.248Z",
+            "modified": "2023-09-13T21:34:02.817Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "page",
+                    "value": "1",
+                    "isPath": false
+                },
+                {
+                    "name": "size",
+                    "value": "5",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGVmYmViMjkwMzIzZWExMWUyMjllMDQiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5NDYzOTk1MiwiZXhwIjoxNjk0NjQzNTUyfQ.u3f3rTqEMUKzM1QEkhAoQWwEt4MevMw89w8X8gQ9sS0",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "bf863a0c-72d1-4c17-a252-a1c262bcc129",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "eb868c73-4c7c-4e8c-a8f1-0ba492c25b2b",
+            "name": "List products",
+            "url": "{{url}}/product/listProducts?page=1&size=2&sort=-price,stock&price[lte]=10000&stock[lte]=10&select=title,desc,priceAfterDiscount,stock,rate",
+            "method": "GET",
+            "sortNum": 190000,
+            "created": "2023-08-20T20:18:43.445Z",
+            "modified": "2023-09-13T22:27:51.435Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "page",
+                    "value": "1",
+                    "isPath": false
+                },
+                {
+                    "name": "size",
+                    "value": "2",
+                    "isPath": false
+                },
+                {
+                    "name": "sort",
+                    "value": "-price,stock",
+                    "isPath": false
+                },
+                {
+                    "name": "price[lte]",
+                    "value": "10000",
+                    "isPath": false
+                },
+                {
+                    "name": "stock[lte]",
+                    "value": "10",
+                    "isPath": false
+                },
+                {
+                    "name": "select",
+                    "value": "title,desc,priceAfterDiscount,stock,rate",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGVmYmViMjkwMzIzZWExMWUyMjllMDQiLCJyb2xlIjoiVXNlciIsImVtYWlsIjoibWF6ZW5tb3N0YWZhMDQ3QGdtYWlsLmNvbSIsImlhdCI6MTY5NDY0MzU5NCwiZXhwIjoxNjk0ODE2Mzk0fQ.YrEHLX0Iiirz8we88_t5SvtEhLMSulQLz9jJTVRjwTc",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "af54b341-0e6c-4b7e-8a6d-02e3d751370b",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "f6f6a553-a9ed-460d-9a97-c57876c72c9a",
+            "name": "Add coupon",
+            "url": "{{url}}/coupon/create",
+            "method": "POST",
+            "sortNum": 200000,
+            "created": "2023-08-20T21:35:20.197Z",
+            "modified": "2023-09-14T13:12:34.831Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"couponCode\":\"testCoupon\",\n  \"couponAmount\":\"100\",\n  \"fromDate\":\"2023-9-14\",\n  \"toDate\":\"2023-9-20\",\n  \"isFixedAmount\":\"true\",\n  \"couponAssginedToUsers\":[\n    {\n    \"userId\":\"64efbeb290323ea11e229e04\",\n    \"maxUsage\":\"3\"\n    }\n    ]\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYUBnbWFpbC5jb20iLCJfaWQiOiI2NGY2MTUwZDA1ZGZkMTE4M2RkOTRmYWYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2OTQ2OTYwMjcsImV4cCI6MTY5NDY5OTYyN30.AU1IljTsS54UScLGHMj_Xf9Smc9cdduAegZw6Ig7-lU",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "580c031b-9453-4e99-ad14-d986495a0cda",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "088ec305-a916-4554-93f1-d00e8b2c983f",
+            "name": "Sign Up",
+            "url": "{{url}}/auth/signUp",
+            "method": "POST",
+            "sortNum": 210000,
+            "created": "2023-08-24T22:01:09.205Z",
+            "modified": "2023-09-04T22:43:44.615Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"userName\":\"kareem\",\n  \"email\":\"kareemElsayed@gmail.com\",\n  \"password\":\"Maz12345\",\n  \"age\":\"26\",\n  \"gender\":\"male\",\n  \"phoneNumber\":\"01227801780\",\n  \"address\":[\"cairo\"]\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "d75324cd-a757-4214-b331-7d1b4a6d9b4e",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "088ec305-a916-4554-93f1-d00e8b2c983f",
+            "name": "Log In ",
+            "url": "{{url}}/auth/logIn",
+            "method": "POST",
+            "sortNum": 220000,
+            "created": "2023-08-24T23:48:21.642Z",
+            "modified": "2023-09-28T22:38:00.224Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"mazenmostafa047@gmail.com\",\n  \"password\":\"Maz12345\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "c1b73076-179c-4daa-80e0-f930fa21a8b3",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "088ec305-a916-4554-93f1-d00e8b2c983f",
+            "name": "forget Password",
+            "url": "{{url}}/auth/forget",
+            "method": "POST",
+            "sortNum": 230000,
+            "created": "2023-08-25T01:03:04.956Z",
+            "modified": "2023-08-25T01:04:57.524Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"mazenmostafa047@gmail.com\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "4279c763-cdcb-4b30-ada7-10af3970c476",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "088ec305-a916-4554-93f1-d00e8b2c983f",
+            "name": "Reset Password",
+            "url": "{{url}}/auth/reset/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJzZW50Q29kZSI6IiQyYiQxMCQ3M2p1ek42c0o1ZUVOTEl4cGdYWk51ZzBVUVI0cThsNWxrSW1Bb09QOUMwUEpBVjJzbDdhNiIsImlhdCI6MTY5MjkyNjg1MSwiZXhwIjoxNjkyOTMwNDUxfQ.pSKRPs2nSJf1cEDdwSQ0BaKPKZBgVu0HksB1YwyAjbI",
+            "method": "POST",
+            "sortNum": 240000,
+            "created": "2023-08-25T01:05:57.051Z",
+            "modified": "2023-08-25T01:28:25.502Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"newPassword\":\"Maz12345\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "feaa596e-78b9-476a-a6d4-251f81cf5d85",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "f6f6a553-a9ed-460d-9a97-c57876c72c9a",
+            "name": "Delete Coupon",
+            "url": "{{url}}/coupon/delete?couponId=6501cfe0f4456a5134d52bc1",
+            "method": "DELETE",
+            "sortNum": 250000,
+            "created": "2023-08-30T23:27:08.965Z",
+            "modified": "2023-09-14T13:12:03.741Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "couponId",
+                    "value": "6501cfe0f4456a5134d52bc1",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYUBnbWFpbC5jb20iLCJfaWQiOiI2NGY2MTUwZDA1ZGZkMTE4M2RkOTRmYWYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2OTQ2OTYwMjcsImV4cCI6MTY5NDY5OTYyN30.AU1IljTsS54UScLGHMj_Xf9Smc9cdduAegZw6Ig7-lU",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "c188b077-ef2b-43ac-9c5d-a58eb9c186c6",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "3e3f95f8-3e56-4891-a3ae-e84e8fcade2e",
+            "name": "Add to Cart",
+            "url": "{{url}}/cart/",
+            "method": "POST",
+            "sortNum": 260000,
+            "created": "2023-08-31T00:27:27.317Z",
+            "modified": "2023-09-04T17:36:38.424Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"productId\":\"64efe0d9e9e17649bd189cbf\",\n  \"quantity\":\"2\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGVmYmViMjkwMzIzZWExMWUyMjllMDQiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5Mzg0ODk2MywiZXhwIjoxNjkzODUyNTYzfQ.RZz4M64Y6GfqJDKkjn9qyPrPw9vZeGP1xfBQqaFkpvc",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "e804b720-2a9d-4149-8024-000bf26594f6",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "3e3f95f8-3e56-4891-a3ae-e84e8fcade2e",
+            "name": "Delete from Cart",
+            "url": "{{url}}/cart/deleteFromCart?productId=64efe0d9e9e17649bd189cbf",
+            "method": "DELETE",
+            "sortNum": 270000,
+            "created": "2023-08-31T01:20:53.802Z",
+            "modified": "2023-08-31T01:34:58.704Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "productId",
+                    "value": "64efe0d9e9e17649bd189cbf",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGVmYmViMjkwMzIzZWExMWUyMjllMDQiLCJyb2xlIjoiVXNlciIsImVtYWlsIjoibWF6ZW5tb3N0YWZhMDQ3QGdtYWlsLmNvbSIsImlhdCI6MTY5MzQ0NTY4NiwiZXhwIjoxNjkzNjE4NDg2fQ.dcG2uAT4_5f7RhO5y6XcMeoOdNRZzxhn6MpIhnUe-qk",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "1f530c91-7cb1-4892-9e73-2ee68a053b22",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "b2ce7d1a-bcf3-4b56-91c7-ecd24504ced1",
+            "name": "Create Order",
+            "url": "{{url}}/order/",
+            "method": "POST",
+            "sortNum": 280000,
+            "created": "2023-08-31T23:43:11.409Z",
+            "modified": "2023-09-09T16:44:05.428Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n        \"productId\":\"64efe0d9e9e17649bd189cbf\",\n        \"quantity\":\"1\",\n        \"address\":\"Tanta\",\n        \"phoneNumbers\":[\"01066075067\",\"01205149000\"],\n        \"paymentMethod\":\"card\",\n        \"couponCode\":\"ordercoupon\"\n    }",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGVmYmViMjkwMzIzZWExMWUyMjllMDQiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5NDI3NzcyNywiZXhwIjoxNjk0MjgxMzI3fQ.0NUNaqhTxAFuEOPjjQNP_J7rdl8fkAXV9GSJk-Y38NY",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "5189bf6d-92da-492b-a2e9-051d1f71a6ed",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "b2ce7d1a-bcf3-4b56-91c7-ecd24504ced1",
+            "name": "From cart To Order",
+            "url": "{{url}}/order/fromCartToOrder?cartId=64efe0b4e9e17649bd189cad",
+            "method": "POST",
+            "sortNum": 290000,
+            "created": "2023-09-03T01:37:05.592Z",
+            "modified": "2023-09-04T17:38:03.644Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "cartId",
+                    "value": "64efe0b4e9e17649bd189cad",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n        \"address\":\"Gharbya,Tanta\",\n        \"phoneNumbers\":[\"01066075067\"],\n        \"paymentMethod\":\"card\",\n        \"couponCode\":\"orderCoupon\"\n    }",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGVmYmViMjkwMzIzZWExMWUyMjllMDQiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5Mzg0ODk2MywiZXhwIjoxNjkzODUyNTYzfQ.RZz4M64Y6GfqJDKkjn9qyPrPw9vZeGP1xfBQqaFkpvc",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "5f2f6dc8-4467-4381-8252-1b02af5c6884",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "f6f6a553-a9ed-460d-9a97-c57876c72c9a",
+            "name": "Update coupon",
+            "url": "{{url}}/coupon/update?couponId=650306c29f74b7d76db40468",
+            "method": "PUT",
+            "sortNum": 300000,
+            "created": "2023-09-10T15:57:04.394Z",
+            "modified": "2023-09-21T16:16:03.810Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "couponId",
+                    "value": "650306c29f74b7d76db40468",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n\"userId\":\"64f65c4842ee421968b7db03\",\n\"maxUsage\":\"1\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYUBnbWFpbC5jb20iLCJfaWQiOiI2NGY2MTUwZDA1ZGZkMTE4M2RkOTRmYWYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2OTUzMTI2NTEsImV4cCI6MTY5NTMxNjI1MX0.1IHig9j03W_Z-wn5MKqCiO-UKaCmWSnaoAr4B1_N3pQ",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "f13d6c05-0a71-4a91-9a44-4b93a8cbd0d6",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "b2ce7d1a-bcf3-4b56-91c7-ecd24504ced1",
+            "name": "Deliverd Order",
+            "url": "{{url}}/order/delivered?orderId=64f6121366689f8a8b279a32",
+            "method": "PATCH",
+            "sortNum": 310000,
+            "created": "2023-09-13T20:50:30.481Z",
+            "modified": "2023-09-13T21:39:38.604Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "orderId",
+                    "value": "64f6121366689f8a8b279a32",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYUBnbWFpbC5jb20iLCJfaWQiOiI2NGY2MTUwZDA1ZGZkMTE4M2RkOTRmYWYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2OTQ2MzgyMDYsImV4cCI6MTY5NDY0MTgwNn0.exo9CgmxPRUBWAQjf8TH-6MEBhSP37l7LGSOJMZk_DA",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "2db6174d-c157-4d4d-b068-a7c33857f710",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "e4c06056-e326-4d06-b29e-e08f5a5aae37",
+            "name": "Add Review",
+            "url": "{{url}}/review/?productId=64efe0d9e9e17649bd189cbf",
+            "method": "POST",
+            "sortNum": 320000,
+            "created": "2023-09-13T21:17:00.609Z",
+            "modified": "2023-09-13T21:40:54.593Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "productId",
+                    "value": "64efe0d9e9e17649bd189cbf",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"reviewRate\": 5 ,\n  \"reviewComment\":\"Wooow ,It's an amazing stuff\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hemVubW9zdGFmYTA0N0BnbWFpbC5jb20iLCJfaWQiOiI2NGVmYmViMjkwMzIzZWExMWUyMjllMDQiLCJyb2xlIjoiVXNlciIsImlhdCI6MTY5NDYzOTk1MiwiZXhwIjoxNjk0NjQzNTUyfQ.u3f3rTqEMUKzM1QEkhAoQWwEt4MevMw89w8X8gQ9sS0",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "c0611476-4334-44a2-af07-90b76b51f791",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "e4c06056-e326-4d06-b29e-e08f5a5aae37",
+            "name": "Get all reviews",
+            "url": "{{url}}/review/getReviews?page=1&size=2",
+            "method": "GET",
+            "sortNum": 330000,
+            "created": "2023-09-13T22:10:45.889Z",
+            "modified": "2023-09-13T22:41:26.292Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "page",
+                    "value": "1",
+                    "isPath": false
+                },
+                {
+                    "name": "size",
+                    "value": "2",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGVmYmViMjkwMzIzZWExMWUyMjllMDQiLCJyb2xlIjoiVXNlciIsImVtYWlsIjoibWF6ZW5tb3N0YWZhMDQ3QGdtYWlsLmNvbSIsImlhdCI6MTY5NDY0MzU5NCwiZXhwIjoxNjk0ODE2Mzk0fQ.YrEHLX0Iiirz8we88_t5SvtEhLMSulQLz9jJTVRjwTc",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "a2eafdc2-b96f-4a56-871c-aabd94a60a67",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "e4c06056-e326-4d06-b29e-e08f5a5aae37",
+            "name": "List Reviews",
+            "url": "{{url}}/review/listReviews?page=1&size=5&sort=-reviewRate&reviewRate[gt]=3&select=-_id",
+            "method": "GET",
+            "sortNum": 340000,
+            "created": "2023-09-13T22:31:48.061Z",
+            "modified": "2023-09-13T22:49:29.120Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "page",
+                    "value": "1",
+                    "isPath": false
+                },
+                {
+                    "name": "size",
+                    "value": "5",
+                    "isPath": false
+                },
+                {
+                    "name": "sort",
+                    "value": "-reviewRate",
+                    "isPath": false
+                },
+                {
+                    "name": "reviewRate[gt]",
+                    "value": "3",
+                    "isPath": false
+                },
+                {
+                    "name": "stock[lt]stock[lt]",
+                    "value": "10",
+                    "isDisabled": true,
+                    "isPath": false
+                },
+                {
+                    "name": "select",
+                    "value": "-_id",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGVmYmViMjkwMzIzZWExMWUyMjllMDQiLCJyb2xlIjoiVXNlciIsImVtYWlsIjoibWF6ZW5tb3N0YWZhMDQ3QGdtYWlsLmNvbSIsImlhdCI6MTY5NDY0MzU5NCwiZXhwIjoxNjk0ODE2Mzk0fQ.YrEHLX0Iiirz8we88_t5SvtEhLMSulQLz9jJTVRjwTc",
+                "bearerPrefix": "ecommerce__"
+            },
+            "tests": []
+        },
+        {
+            "_id": "e951f0a9-a041-477d-b839-511125711221",
+            "colId": "36162c45-6eb7-4734-a114-da2f769c1a27",
+            "containerId": "088ec305-a916-4554-93f1-d00e8b2c983f",
+            "name": "Social logIn Google",
+            "url": "{{url}}/auth/loginWithGmail",
+            "method": "POST",
+            "sortNum": 350000,
+            "created": "2023-09-16T22:31:31.273Z",
+            "modified": "2023-09-16T22:31:52.549Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"idToken\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjdjMGI2OTEzZmUxMzgyMGEzMzMzOTlhY2U0MjZlNzA1MzVhOWEwYmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2MTA2ODc1MjAxNS02dGNrYTExdDMyMGgycnFtdjluNmJnanNkNWNhczNjMy5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjYxMDY4NzUyMDE1LTZ0Y2thMTF0MzIwaDJycW12OW42Ymdqc2Q1Y2FzM2MzLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE3NTY2NzUxMjA0ODc4MjA0MjAxIiwiZW1haWwiOiJtYXplbm1vc3RhZmEwNDdAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTY5NDkwMzAxNiwibmFtZSI6Im1hemVuIG1vc3RhZmEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jTERHb0dvakJzdVVXQURyWnhQVUNTZTViNjY3b1d3RXVkblRJTnVIQjJPUWc9czk2LWMiLCJnaXZlbl9uYW1lIjoibWF6ZW4iLCJmYW1pbHlfbmFtZSI6Im1vc3RhZmEiLCJsb2NhbGUiOiJhciIsImlhdCI6MTY5NDkwMzMxNiwiZXhwIjoxNjk0OTA2OTE2LCJqdGkiOiJjOWZmNTM1MjI4NzFhZGM3MDBkM2EyODdlODUzOTNkMzhlNzc3MjU5In0.GWhX3IX-iCVnuXuDA4-vLDZ2nsvAIEAeT89ILJ6XMX4UOlY_T6VDzJbTQLonIzvGNphRYA_uCVBi23c1T9cgyJbRERLRzGGmoVhJ5bXP3d9iT3pJHlc9bxVBgDMuHPe22n6GNlciKp2ZBJlj2pN2HO2SzB87WGGF5LVqSZkLIhF5J_HpW3sZsVQqg5csdQkta2yjIP3QJW02JmJJCh_oJc2pl1UH2w06jQP9jd9F4A6L3m7p7EvD_L6jn5vHoipcAT6QHLsEyozSDJvOYKO5wm9EvJRXp-2gLblfrpghcKfl9q_2hIPG7fyinXdWqb6AVBT09RdfeSWWoziAf9d3lA\"\n\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ],
+    "ref": "LK0AKCphLPfUOM2gLChCJmebwRwcorQN8UrZmdbRhnu1-q3IAgZJlT96iHdZWBY6UbzZdk184oVXqi6n1i2k-A"
+}
